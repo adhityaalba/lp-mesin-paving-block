@@ -9,6 +9,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    "**/._*", // macOS AppleDouble files on exFAT drives
     "out/**",
     "build/**",
     "next-env.d.ts",

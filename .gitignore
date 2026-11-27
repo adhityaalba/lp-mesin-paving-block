@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# macOS / exFAT metadata
+._*
+.DS_Store
+.vercel
+
+# local-only
+/content/wp-export
+/.claude
