@@ -81,7 +81,7 @@ export function Shape() {
           <div className="row"><span className="k">Siklus cetak</span><span className="v tnum">{m.calc.pcsPerCycle} pcs / {m.calc.cycleSeconds} detik</span></div>
           <div className="row"><span className="k">Daya listrik</span><span className="v tnum">{m.highlight.power}, 3 phase</span></div>
           {eff >= 95 && (
-            <p style={{ marginTop: 12, color: "var(--signal)", fontSize: 13 }}>
+            <p style={{ marginTop: 12, color: "var(--accent-hi)", fontSize: 13 }}>
               Efisiensi di atas 90% jarang tercapai. Ganti palet dan suplai bahan selalu memakan waktu.
             </p>
           )}

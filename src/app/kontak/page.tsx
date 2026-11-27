@@ -64,7 +64,7 @@ export default function KontakPage() {
             title="Peta lokasi workshop CV Multi Baja Technic"
             src={`https://www.google.com/maps?q=${encodeURIComponent(site.mapsQuery)}&output=embed`}
             className="absolute inset-0 size-full"
-            style={{ filter: "grayscale(1) invert(0.92) contrast(0.9)", border: 0 }}
+            style={{ filter: "grayscale(0.6) sepia(0.15)", border: 0 }}
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />

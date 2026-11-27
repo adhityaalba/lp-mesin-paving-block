@@ -66,7 +66,7 @@ function Fragment({ i }: { i: number }) {
       >
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
           <b style={{ fontWeight: 500, fontSize: 17 }}>{s.title}</b>
-          <span style={{ color: "var(--signal)", fontSize: 13 }}>
+          <span style={{ color: "var(--muted)", fontSize: 13 }}>
             Tahap {i + 1} / {STAGES.length}
           </span>
         </div>
@@ -118,7 +118,7 @@ export function Stages() {
       </div>
       <div className="stages-r">
         <Parallax className="absolute inset-0" amount={40}>
-          <Image src="/brand/paving-texture.webp" alt="" fill sizes="50vw" className="object-cover dim-strong" style={{ opacity: 0.22 }} />
+          <Image src="/brand/paving-texture.webp" alt="" fill sizes="50vw" className="object-cover" style={{ opacity: 0.18, filter: "grayscale(1)", mixBlendMode: "multiply" }} />
         </Parallax>
         <Fragment i={i} />
       </div>

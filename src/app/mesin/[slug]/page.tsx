@@ -97,7 +97,7 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
             ["Waktu siklus", `${m.calc.cycleSeconds} detik`],
             ["Daya listrik", m.highlight.power],
           ].map(([k, v], i) => (
-            <Reveal key={k} delay={i * 0.06} className="col-span-6 lg:col-span-3">
+            <Reveal key={k} delay={i * 0.06} className="figure col-span-6 lg:col-span-3">
               <p className="small muted">{k}</p>
               <p className="display tnum" style={{ marginTop: 10 }}>{v}</p>
             </Reveal>

@@ -13,8 +13,8 @@ type Block = {
   color: THREE.Color;
 };
 
-const CONCRETE = ["#6f6e6a", "#7a7873", "#64635f", "#85837c", "#5c5b57"];
-const ACCENTS = ["#d7191f", "#ffc20e"];
+const CONCRETE = ["#9a958c", "#a7a296", "#8e8a82", "#b3ada1", "#857f76"];
+const ACCENTS = ["#d71920", "#d71920", "#d2ad16"];
 
 /** Basket-weave layout of holland (20×10) paving blocks. */
 function buildBlocks(cols: number, rows: number): Block[] {
@@ -146,11 +146,11 @@ export default function PavingField() {
         gl={{ antialias: true, powerPreference: "high-performance" }}
         onCreated={({ gl, scene }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
-          scene.background = new THREE.Color("#0b0a09");
-          scene.fog = new THREE.Fog("#0b0a09", 14, 34);
+          scene.background = new THREE.Color("#f1ece3");
+          scene.fog = new THREE.Fog("#f1ece3", 16, 36);
         }}
       >
-        <ambientLight intensity={0.35} />
+        <ambientLight intensity={0.6} />
         <hemisphereLight args={["#fff4dc", "#1a1010", 0.5]} />
         <directionalLight
           position={[10, 18, 6]}
@@ -163,8 +163,8 @@ export default function PavingField() {
           shadow-camera-top={22}
           shadow-camera-bottom={-22}
         />
-        <pointLight position={[-12, 5, -4]} intensity={60} distance={40} color="#d7191f" />
-        <pointLight position={[10, 4, 8]} intensity={30} distance={30} color="#ffc20e" />
+        <pointLight position={[-12, 5, -4]} intensity={25} distance={40} color="#d71920" />
+        <pointLight position={[10, 4, 8]} intensity={25} distance={30} color="#d2ad16" />
         <Field reduced={reduced} />
       </Canvas>
     </div>
