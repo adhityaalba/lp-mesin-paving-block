@@ -22,8 +22,8 @@ export function ArticleList({ posts, tags }: { posts: Post[]; tags: string[] }) 
   }, [posts, tag, q]);
 
   return (
-    <section className="section wrap">
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between", alignItems: "center" }}>
+    <section className="shell sec">
+      <div className="inner" style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "space-between", alignItems: "center" }}>
         <div className="seg" role="group" aria-label="Filter topik">
           {[null, ...tags].map((t) => (
             <button
@@ -36,8 +36,8 @@ export function ArticleList({ posts, tags }: { posts: Post[]; tags: string[] }) 
                 setLimit(PAGE);
               }}
             >
-              {tag === t && <motion.span layoutId="tag-seg" className="seg-bg" transition={{ type: "spring", stiffness: 420, damping: 34 }} />}
-              <span>{t ?? "Semua"}</span>
+              {tag === t && <motion.span layoutId="tag-on" className="seg-bg" transition={{ type: "spring", stiffness: 420, damping: 34 }} />}
+              {t ?? "Semua"}
             </button>
           ))}
         </div>
@@ -51,24 +51,23 @@ export function ArticleList({ posts, tags }: { posts: Post[]; tags: string[] }) 
               setLimit(PAGE);
             }}
             placeholder="Cari artikel"
+            style={{ borderRadius: 999 }}
           />
         </label>
       </div>
 
-      <p className="small dim" style={{ marginTop: 20 }} aria-live="polite">
-        {filtered.length} artikel
-      </p>
+      <p className="dim inner" style={{ marginTop: 18, fontSize: 14 }} aria-live="polite">{filtered.length} artikel</p>
 
-      <motion.ul layout className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 28 }}>
+      <motion.ul layout className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" style={{ marginTop: 20 }}>
         <AnimatePresence mode="popLayout">
           {filtered.slice(0, limit).map((p, i) => (
             <motion.li
               key={p.slug}
               layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: Math.min(i % PAGE, 6) * 0.03 }}
+              initial={{ opacity: 0, y: 24, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: Math.min(i % PAGE, 6) * 0.04 }}
             >
               <PostCard post={p} priority={i < 3} />
             </motion.li>
@@ -77,8 +76,8 @@ export function ArticleList({ posts, tags }: { posts: Post[]; tags: string[] }) 
       </motion.ul>
 
       {limit < filtered.length && (
-        <div style={{ marginTop: 64, display: "flex", justifyContent: "center" }}>
-          <button type="button" className="btn" onClick={() => setLimit((l) => l + PAGE)}>
+        <div style={{ marginTop: 48, display: "flex", justifyContent: "center" }}>
+          <button type="button" className="pill light plain" onClick={() => setLimit((l) => l + PAGE)}>
             Muat lebih banyak · {filtered.length - limit} lagi
           </button>
         </div>

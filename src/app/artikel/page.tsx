@@ -24,8 +24,8 @@ export default function ArtikelPage() {
       <PageHero
         title="Artikel dan panduan produksi"
         lead={`${posts.length} tulisan tentang memilih mesin, kapasitas, perawatan, rasio campuran, sampai strategi usaha paving.`}
-        img="/brand/paving-texture.webp"
-        alt="Permukaan paving holland"
+        img="/brand/stack.webp"
+        alt="Tumpukan paving hasil produksi"
         crumbs={[{ label: "Artikel" }]}
       />
       <ArticleList posts={posts.map((p) => ({ ...p, html: "" }))} tags={tags} />

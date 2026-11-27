@@ -5,24 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { Pill } from "@/components/ui/pill";
 import { nav, site, waLink } from "@/lib/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-/** Small live-feeling readout: the workshop status line. */
-function WorkshopRead() {
-  return (
-    <div className="netread">
-      <span className="pulse" aria-hidden />
-      <span>
-        Workshop <b>Mojokerto</b>
-      </span>
-      <span>
-        WA <b className="tnum">{site.phone}</b>
-      </span>
-    </div>
-  );
-}
 
 function Brand() {
   return (
@@ -43,8 +29,8 @@ export function Header() {
   useEffect(() => {
     const on = () => {
       const y = window.scrollY;
-      setSolid(y > 40);
-      if (y > 400 && y > last.current + 4) setHide(true);
+      setSolid(y > 60);
+      if (y > 500 && y > last.current + 4) setHide(true);
       if (y < last.current - 4) setHide(false);
       last.current = y;
     };
@@ -53,48 +39,46 @@ export function Header() {
     return () => window.removeEventListener("scroll", on);
   }, []);
 
-  // Close the sheet when the route changes (state-from-props, no effect needed).
   const [lastPath, setLastPath] = useState(pathname);
   if (pathname !== lastPath) {
     setLastPath(pathname);
     setOpen(false);
   }
-
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
   }, [open]);
 
   return (
     <>
-      <header className={`nav ${solid ? "solid" : ""} ${hide && !open ? "hide" : ""}`}>
-        <div className="wrap nav-in">
-          <div className="nav-left">
-            <Brand />
-            <nav className="nav-links" aria-label="Navigasi utama">
-              {nav.map((l) => {
-                const on = pathname.startsWith(l.href);
-                return (
-                  <Link key={l.href} href={l.href} className={on ? "on" : ""}>
-                    {on && (
-                      <motion.span layoutId="navpill" className="pill" transition={{ type: "spring", stiffness: 380, damping: 34 }} />
-                    )}
-                    {l.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-          <div className="nav-right">
-            <WorkshopRead />
-            <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn primary sm">
-              Konsultasi
-            </a>
-            <button className="menu-btn" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="sheet">
+      <motion.header
+        className={`hdr ${solid ? "solid" : ""} ${hide && !open ? "hide" : ""}`}
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1, ease, delay: 0.2 }}
+      >
+        <div className="hdr-in">
+          <Brand />
+          <nav className="navpill glass" aria-label="Navigasi utama">
+            {nav.map((l) => {
+              const on = pathname.startsWith(l.href);
+              return (
+                <Link key={l.href} href={l.href} className={on ? "on" : ""}>
+                  {on && <motion.span layoutId="nav-on" className="on-bg" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
+                  {l.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <span className="hdr-cta" style={{ display: "inline-flex" }}>
+              <Pill href={waLink()} size="sm">Konsultasi</Pill>
+            </span>
+            <button className="menu-btn pill light sm plain" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="sheet">
               Menu
             </button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       <AnimatePresence>
         {open && (
@@ -104,34 +88,31 @@ export function Header() {
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
-            initial={{ clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.6, ease }}
+            initial={{ clipPath: "circle(0% at 92% 4%)" }}
+            animate={{ clipPath: "circle(150% at 92% 4%)" }}
+            exit={{ clipPath: "circle(0% at 92% 4%)" }}
+            transition={{ duration: 0.7, ease }}
           >
-            <div className="nav-in">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Brand />
-              <button className="menu-btn" style={{ display: "inline-block" }} onClick={() => setOpen(false)}>
+              <button className="pill light sm plain" onClick={() => setOpen(false)}>
                 Tutup
               </button>
             </div>
             <nav aria-label="Menu seluler">
               {[{ href: "/", label: "Beranda" }, ...nav].map((l, i) => (
-                <motion.div
-                  key={l.href}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + i * 0.05, duration: 0.6, ease }}
-                >
-                  <Link href={l.href}>{l.label}</Link>
+                <motion.div key={l.href} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.05, duration: 0.7, ease }}>
+                  <Link href={l.href}>
+                    {l.label} <small>0{i + 1}</small>
+                  </Link>
                 </motion.div>
               ))}
             </nav>
-            <div className="sheet-foot">
-              <WorkshopRead />
-              <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn primary">
-                Konsultasi via WhatsApp <span className="arrow">→</span>
-              </a>
+            <div style={{ marginTop: "auto", display: "grid", gap: 10 }}>
+              <Pill href={waLink()}>Konsultasi via WhatsApp</Pill>
+              <p className="dim" style={{ fontSize: 13 }}>
+                WA {site.phone} · Workshop Puri, Mojokerto
+              </p>
             </div>
           </motion.div>
         )}

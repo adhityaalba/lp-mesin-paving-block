@@ -130,7 +130,7 @@ export const machines: Machine[] = [
       { src: "/brand/hr6e12-22.webp", alt: "Panel kontrol dan power pack HR6E12" },
       { src: "/brand/hr6e12-31.webp", alt: "Motor pompa hidrolik HR6E12" },
     ],
-    video: "/video/hr6e12-loop.mp4",
+    video: undefined,
     highlight: { strength: "K400", output: "12 pcs", cycle: "1× cetak / 30 dtk", power: "25 kW" },
     calc: { pcsPerCycle: 12, cycleSeconds: 30 },
     general: [

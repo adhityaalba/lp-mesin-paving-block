@@ -1,55 +1,64 @@
-import Link from "next/link";
 import { Hero } from "@/components/home/hero";
-import { Shape } from "@/components/home/shape";
-import { Board } from "@/components/home/board";
-import { Stages } from "@/components/home/stages";
-import { Rooms } from "@/components/home/rooms";
-import { FaqTable } from "@/components/faq-table";
-import { Cta } from "@/components/cta";
+import { Stats } from "@/components/home/stats";
+import { Bento } from "@/components/home/bento";
+import { MachinesHz } from "@/components/home/machines-hz";
+import { ProcessStack } from "@/components/home/process-stack";
+import { Calculator } from "@/components/home/calculator";
+import { Faq } from "@/components/faq";
+import { CtaBanner } from "@/components/cta-banner";
 import { PostCard } from "@/components/post-card";
 import { Item, Reveal, Stagger } from "@/components/motion/reveal";
+import { Pill } from "@/components/ui/pill";
 import { faqs } from "@/lib/site";
 import { posts } from "@/lib/posts";
 
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
+  mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 };
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <Board />
-      <Shape />
-      <Rooms />
-      <Stages />
-      <FaqTable items={faqs} />
+      <Stats />
+      <Bento />
+      <MachinesHz />
+      <ProcessStack />
+      <Calculator />
 
-      <section className="section wrap" aria-labelledby="posts-h">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 24, flexWrap: "wrap", marginBottom: 40 }}>
-          <Reveal as="h2" id="posts-h" className="head" style={{ maxWidth: "14ch" }}>
-            Belajar dulu sebelum berinvestasi
-          </Reveal>
-          <Link href="/artikel/" className="textlink">
-            Semua {posts.length} artikel <span>→</span>
-          </Link>
+      <section className="shell sec" style={{ paddingTop: 0 }} aria-labelledby="faq-h">
+        <div className="two inner">
+          <div className="l sticky-l">
+            <Reveal as="p" className="label">FAQ</Reveal>
+            <Reveal as="h2" id="faq-h" className="h-sec" delay={0.05} style={{ marginTop: 10 }}>Pertanyaan yang sering diajukan</Reveal>
+            <Reveal delay={0.1} style={{ marginTop: 22 }}>
+              <Pill href="/kontak/" tone="ghost" icon={false} size="sm">Tanya langsung</Pill>
+            </Reveal>
+          </div>
+          <div className="r">
+            <Faq items={faqs} />
+          </div>
         </div>
-        <Stagger className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+      </section>
+
+      <section className="shell" aria-labelledby="posts-h">
+        <div className="inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: 24, flexWrap: "wrap", marginBottom: 28 }}>
+          <div>
+            <Reveal as="p" className="label">Artikel & panduan</Reveal>
+            <Reveal as="h2" id="posts-h" className="h-sec" delay={0.05} style={{ marginTop: 10 }}>Belajar sebelum berinvestasi</Reveal>
+          </div>
+          <Reveal delay={0.1}><Pill href="/artikel/" tone="ghost" icon={false} size="sm">Semua {posts.length} artikel</Pill></Reveal>
+        </div>
+        <Stagger className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {posts.slice(0, 3).map((p) => (
-            <Item key={p.slug}>
-              <PostCard post={p} />
-            </Item>
+            <Item key={p.slug}><PostCard post={p} /></Item>
           ))}
         </Stagger>
       </section>
 
-      <Cta />
+      <CtaBanner />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
     </>
   );

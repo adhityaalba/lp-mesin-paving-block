@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
+import { ArrowUR } from "@/components/ui/icons";
 import { machines } from "@/lib/machines";
 import { waLink } from "@/lib/site";
 
@@ -31,33 +32,24 @@ export function ContactForm({ defaultMachine = "" }: { defaultMachine?: string }
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate>
-      <label className="field">
-        Nama
-        <input
-          name="name"
-          autoComplete="name"
-          aria-invalid={!!error}
-          aria-describedby={error ? `${id}-err` : undefined}
-        />
-        {error && (
-          <span id={`${id}-err`} role="alert" className="err">
-            {error}
-          </span>
-        )}
-      </label>
-      <label className="field">
-        Kota atau lokasi pabrik
-        <input name="city" autoComplete="address-level2" />
-      </label>
+    <form onSubmit={onSubmit} noValidate style={{ display: "grid", gap: 16, marginTop: 20 }}>
+      <div style={{ display: "grid", gap: 16, gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
+        <label className="field">
+          Nama
+          <input name="name" autoComplete="name" aria-invalid={!!error} aria-describedby={error ? `${id}-err` : undefined} />
+          {error && <span id={`${id}-err`} role="alert" className="err">{error}</span>}
+        </label>
+        <label className="field">
+          Kota atau lokasi pabrik
+          <input name="city" autoComplete="address-level2" />
+        </label>
+      </div>
       <label className="field">
         Mesin yang diminati
         <select name="machine" defaultValue={defaultMachine}>
           <option value="">Belum tahu, mohon rekomendasi</option>
           {machines.map((m) => (
-            <option key={m.slug} value={`${m.code} (${m.nickname})`}>
-              {m.code} · {m.nickname}
-            </option>
+            <option key={m.slug} value={`${m.code} (${m.nickname})`}>{m.code} · {m.nickname}</option>
           ))}
         </select>
       </label>
@@ -65,8 +57,9 @@ export function ContactForm({ defaultMachine = "" }: { defaultMachine?: string }
         Pesan
         <textarea name="note" rows={3} placeholder="Contoh: target 2.000 paving per hari, listrik 33 kVA" />
       </label>
-      <button type="submit" className="btn wa">
-        Lanjut di WhatsApp <span className="arrow">→</span>
+      <button type="submit" className="pill wa" style={{ justifySelf: "start" }}>
+        <span>Lanjut di WhatsApp</span>
+        <span className="ico"><ArrowUR /></span>
       </button>
     </form>
   );

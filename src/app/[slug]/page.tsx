@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PageSkeleton } from "@/components/page-skeleton";
 import { PostCard } from "@/components/post-card";
-import { Cta } from "@/components/cta";
+import { CtaBanner } from "@/components/cta-banner";
 import { ReadingProgress } from "@/components/reading-progress";
+import { Pill } from "@/components/ui/pill";
 import { formatDate, getPost, posts, relatedPosts } from "@/lib/posts";
 import { machines } from "@/lib/machines";
 import { site, waLink } from "@/lib/site";
@@ -24,18 +24,13 @@ export async function generateMetadata({ params }: PageProps<"/[slug]">): Promis
     title: p.title,
     description: p.excerpt,
     alternates: { canonical: `/${p.slug}/` },
-    openGraph: {
-      type: "article",
-      publishedTime: p.date,
-      modifiedTime: p.modified,
-      images: p.cover ? [{ url: p.cover }] : undefined,
-    },
+    openGraph: { type: "article", publishedTime: p.date, modifiedTime: p.modified, images: p.cover ? [{ url: p.cover }] : undefined },
   };
 }
 
 export default function PostPage({ params }: PageProps<"/[slug]">) {
   return (
-    <Suspense fallback={<PageSkeleton />}>
+    <Suspense fallback={<div style={{ minHeight: "80svh" }} />}>
       <PostContent params={params} />
     </Suspense>
   );
@@ -63,74 +58,63 @@ async function PostContent({ params }: { params: PageProps<"/[slug]">["params"] 
   return (
     <>
       <ReadingProgress />
-      <article>
-        <header className="wrap" style={{ paddingTop: 140, paddingBottom: 48 }}>
-          <nav aria-label="Breadcrumb" className="ph-crumb">
+      <article className="shell" style={{ paddingTop: 120 }}>
+        <header className="inner" style={{ maxWidth: 980 }}>
+          <nav aria-label="Breadcrumb" className="crumb">
             <Link href="/">Beranda</Link>
             <span aria-hidden>/</span>
             <Link href="/artikel/">Artikel</Link>
           </nav>
-          <div className="grid12" style={{ rowGap: 24 }}>
-            <h1 className="display col-span-12 lg:col-span-8" style={{ fontSize: "clamp(2rem, 1.3rem + 2.6vw, 3.75rem)" }}>
-              {post.title}
-            </h1>
-            <p className="small muted col-span-12 lg:col-span-3 lg:col-start-10 lg:self-end">
-              {formatDate(post.date)} · {post.readingMinutes} menit baca
-              {post.tags.length > 0 && <span className="dim" style={{ display: "block", marginTop: 6 }}>{post.tags.slice(0, 3).join(", ")}</span>}
-            </p>
-          </div>
+          <span className="badge" style={{ background: "var(--card)" }}>
+            <span className="dot gold" /> {formatDate(post.date)} · {post.readingMinutes} menit baca
+          </span>
+          <h1 className="h-sec" style={{ marginTop: 18, fontSize: "clamp(2rem, 1.3rem + 2.6vw, 3.6rem)" }}>{post.title}</h1>
         </header>
 
         {post.cover && (
-          <div className="wrap">
-            <div className="relative aspect-video overflow-hidden bg-surface" style={{ maxWidth: 1200 }}>
-              <Image src={post.cover} alt={post.coverAlt} fill preload sizes="(min-width:1280px) 1200px, 100vw" className="object-cover dimmed" />
+          <div className="card" style={{ padding: 8, marginTop: 32 }}>
+            <div className="relative aspect-[21/10] overflow-hidden" style={{ borderRadius: 14 }}>
+              <Image src={post.cover} alt={post.coverAlt} fill preload sizes="(min-width:1440px) 1400px, 100vw" className="object-cover" />
             </div>
           </div>
         )}
 
-        <div className="section wrap">
-          <div className="grid12" style={{ rowGap: 48 }}>
-            <div className="prose-mpb col-span-12 lg:col-span-7" dangerouslySetInnerHTML={{ __html: post.html }} />
-            <aside className="col-span-12 lg:col-span-4 lg:col-start-9">
-              <div className="sticky-l" style={{ display: "grid", gap: 4 }}>
-                <div className="spec-group">
-                  <h3>Butuh mesinnya?</h3>
-                  <p style={{ fontSize: 20, letterSpacing: "-0.01em", lineHeight: 1.3 }}>Konsultasi gratis dengan produsen langsung.</p>
-                  <a
-                    href={waLink(`Halo, saya baru membaca artikel "${post.title}". Saya ingin konsultasi mesin paving block.`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn primary"
-                    style={{ marginTop: 18, width: "100%" }}
-                  >
-                    Chat WhatsApp <span className="arrow">→</span>
-                  </a>
-                </div>
-                {(mentioned.length ? mentioned : machines).slice(0, 3).map((m) => (
-                  <Link key={m.slug} href={`/mesin/${m.slug}/`} className="step" style={{ gridTemplateColumns: "1fr auto", alignItems: "center", padding: 20 }}>
-                    <span>
-                      <span style={{ display: "block", fontWeight: 500 }}>{m.code}</span>
-                      <span className="small muted">{m.nickname}</span>
-                    </span>
-                    <span className="small muted tnum">{m.highlight.strength}</span>
-                  </Link>
-                ))}
-              </div>
-            </aside>
+        <div className="two" style={{ paddingBlock: "clamp(40px, 6vw, 80px)" }}>
+          <div className="card pad" style={{ gridColumn: "1 / span 8" }}>
+            <div className="prose-mpb" dangerouslySetInnerHTML={{ __html: post.html }} />
           </div>
+          <aside style={{ gridColumn: "9 / span 4" }}>
+            <div className="sticky-l rows">
+              <div className="card pad red">
+                <span className="label">Butuh mesinnya?</span>
+                <p className="h-card" style={{ marginTop: 8 }}>Konsultasi gratis dengan produsen langsung.</p>
+                <div style={{ marginTop: 18 }}>
+                  <Pill href={waLink(`Halo, saya baru membaca artikel "${post.title}". Saya ingin konsultasi mesin paving block.`)} tone="light" size="sm">
+                    Chat WhatsApp
+                  </Pill>
+                </div>
+              </div>
+              {(mentioned.length ? mentioned : machines).slice(0, 3).map((m) => (
+                <Link key={m.slug} href={`/mesin/${m.slug}/`} className="card lift" style={{ padding: 18, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span>
+                    <b style={{ display: "block", fontWeight: 500 }}>{m.code}</b>
+                    <span className="dim" style={{ fontSize: 13 }}>{m.nickname}</span>
+                  </span>
+                  <span className="chips"><span>{m.highlight.strength}</span></span>
+                </Link>
+              ))}
+            </div>
+          </aside>
         </div>
       </article>
 
-      <section className="section wrap">
-        <h2 className="head" style={{ marginBottom: 40 }}>Baca juga</h2>
-        <div className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map((p) => (
-            <PostCard key={p.slug} post={p} />
-          ))}
+      <section className="shell" style={{ paddingBottom: 24 }}>
+        <h2 className="h-sec inner" style={{ marginBottom: 24 }}>Baca juga</h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((p) => <PostCard key={p.slug} post={p} />)}
         </div>
       </section>
-      <Cta />
+      <CtaBanner />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </>
   );

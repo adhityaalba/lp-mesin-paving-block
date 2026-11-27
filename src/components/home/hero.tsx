@@ -1,153 +1,103 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { SplitTitle } from "@/components/motion/reveal";
+import { useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { Magnetic, SplitTitle } from "@/components/motion/reveal";
+import { Pill } from "@/components/ui/pill";
+import { ArrowUR, WhatsAppIcon } from "@/components/ui/icons";
 import { waLink } from "@/lib/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const PavingField = dynamic(() => import("@/components/three/paving-field"), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-bg" />,
-});
-
-/** Real workshop photographs for the small print. */
-const SMALL = [
-  { src: "/brand/hr6e12-1.webp", alt: "Mesin HR6E12 di workshop Mojokerto" },
-  { src: "/brand/rh1s12-studio.webp", alt: "Mesin RH1S12 tampak samping" },
-  { src: "/brand/hr6e12-22.webp", alt: "Panel kontrol dan power pack mesin HR6E12" },
-];
-
-const PHASES = ["Bahan masuk ke cetakan", "Vibrasi ganda memadatkan", "Tekanan hidrolik turun", "Paving padat, siap diangkat"];
-
-function Crossfade() {
-  const [i, setI] = useState(0);
-  const reduce = useReducedMotion();
-  useEffect(() => {
-    if (reduce) return;
-    const t = setInterval(() => {
-      if (!document.hidden) setI((x) => (x + 1) % SMALL.length);
-    }, 5600);
-    return () => clearInterval(t);
-  }, [reduce]);
-  return (
-    <AnimatePresence initial={false}>
-      <motion.div
-        key={SMALL[i].src}
-        className="absolute inset-0"
-        initial={{ opacity: 0, scale: 1.06 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 1.6, ease: "easeInOut" }}
-      >
-        <Image src={SMALL[i].src} alt={SMALL[i].alt} fill sizes="(min-width:1080px) 13vw, 30vw" />
-      </motion.div>
-    </AnimatePresence>
-  );
-}
-
-function PhaseCaption() {
-  const [p, setP] = useState(0);
-  const reduce = useReducedMotion();
-  useEffect(() => {
-    if (reduce) return;
-    const t = setInterval(() => {
-      if (!document.hidden) setP((x) => (x + 1) % PHASES.length);
-    }, 2400);
-    return () => clearInterval(t);
-  }, [reduce]);
-  return (
-    <div className="hero-big-cap" aria-live="polite">
-      <span className="pulse" />
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={p}
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.35 }}
-        >
-          {PHASES[p]}
-        </motion.span>
-      </AnimatePresence>
-    </div>
-  );
-}
-
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const bigY = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  const smallY = useTransform(scrollYProgress, [0, 1], [0, -260]);
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, 80]);
-  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const bgY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "14%"]);
+  const machineY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "-22%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 120]);
+  const textO = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const cardScale = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [1, 0.94]);
+
+  // Cursor parallax: background and machine shift in opposite directions.
+  const mx = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 60, damping: 20 });
+  const bgX = useTransform(sx, (v) => v * -14);
+  const mX = useTransform(sx, (v) => v * 22);
 
   return (
-    <section className="hero" ref={ref} aria-labelledby="hero-title">
-      <div className="hero-stage">
+    <section
+      ref={ref}
+      className="hero"
+      aria-labelledby="hero-h"
+      onPointerMove={(e) => {
+        if (reduce || e.pointerType !== "mouse") return;
+        mx.set(e.clientX / window.innerWidth - 0.5);
+      }}
+    >
+      <motion.div className="hero-card" style={{ scale: cardScale }}>
         <motion.div
-          className="hero-small"
-          style={{ y: smallY }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4, ease, delay: 0.5 }}
+          className="hero-bg"
+          style={{ y: bgY, x: bgX }}
+          initial={{ scale: 1.18, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 2, ease }}
         >
-          <Crossfade />
+          <Image src="/brand/hero-scene.webp" alt="" fill preload sizes="100vw" />
         </motion.div>
-        <motion.div
-          className="hero-big"
-          style={{ y: bigY }}
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.6, ease, delay: 0.15 }}
-        >
-          <PavingField />
-          <PhaseCaption />
-        </motion.div>
-      </div>
 
-      <motion.div className="hero-copy" style={{ y: copyY, opacity: fade }}>
-        <SplitTitle as="h1" text="Mesin paving block yang mencetak padat, sampai K500" delay={0.3} instant />
-        <span id="hero-title" className="sr-only">
-          CV Multi Baja Technic, produsen mesin cetak paving block dan batako hidrolik
-        </span>
-        <motion.p
-          className="sub"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 0.7 }}
-        >
-          Mesin cetak paving dan batako hidrolik dengan multiple vibrasi. Hasilnya padat dan kuat, sesuai standar
-          proyek pemerintah maupun swasta.
-        </motion.p>
+        <motion.div className="hero-center" style={{ y: textY, opacity: textO }}>
+          <motion.span className="badge" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease, delay: 0.5 }}>
+            <span className="dot" /> Produsen langsung · Mojokerto
+          </motion.span>
+          <SplitTitle as="h1" id="hero-h" className="h-display" text="Mesin Paving Block K500" delay={0.6} instant />
+          <motion.p className="lead" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease, delay: 1.1 }}>
+            Mesin cetak paving dan batako hidrolik dengan multiple vibrasi. Padat, kuat, dan siap untuk standar proyek.
+          </motion.p>
+        </motion.div>
+
+        <motion.div className="hero-shadow" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.4, delay: 1.2 }} />
         <motion.div
-          className="hero-actions"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 0.85 }}
+          className="hero-machine"
+          style={{ y: machineY, x: mX }}
+          initial={{ opacity: 0, y: 120, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.6, ease, delay: 0.9 }}
         >
-          <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn primary">
-            Konsultasi via WhatsApp <span className="arrow">→</span>
-          </a>
-          <Link href="/mesin/" className="chip" aria-label="Lihat tiga tipe mesin">
-            <span className="chip-label">3 tipe</span>
-            <span>RH1E15 · RH1S12 · HR6E12</span>
+          <motion.div
+            className="absolute inset-0"
+            style={{ translate: "-50% 0" }}
+            animate={reduce ? undefined : { y: [0, -10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image src="/brand/rh1e15-hd.webp" alt="Mesin paving block RH1E15 buatan CV Multi Baja Technic" fill sizes="(min-width:720px) 22vw, 46vw" preload />
+          </motion.div>
+        </motion.div>
+
+        <motion.div className="hero-stat glass" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, ease, delay: 1.3 }}>
+          <b className="tnum">K500</b>
+          <span className="label" style={{ color: "var(--muted)" }}>Kuat tekan hasil cetak</span>
+          <div style={{ marginTop: 14 }}>
+            <Magnetic>
+              <Pill href={waLink()} tone="light" size="sm" icon={<WhatsAppIcon className="size-3.5" />}>
+                Chat WhatsApp
+              </Pill>
+            </Magnetic>
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 1.4 }}>
+          <Link href="#mesin" className="notch" aria-label="Lihat katalog mesin">
+            <span className="circle-ico"><ArrowUR /></span>
+            <span className="notch-txt">
+              <b style={{ display: "block", fontWeight: 500, fontSize: 15 }}>Katalog mesin</b>
+              <span className="dim" style={{ fontSize: 13 }}>3 tipe ›</span>
+            </span>
           </Link>
         </motion.div>
       </motion.div>
-
-      <motion.p
-        className="hero-side"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 1.1 }}
-      >
-        <b>Dirakit di workshop sendiri</b> di Mojokerto, lalu dikirim dan dipasang di seluruh Indonesia. Garansi 1 tahun.
-      </motion.p>
     </section>
   );
 }

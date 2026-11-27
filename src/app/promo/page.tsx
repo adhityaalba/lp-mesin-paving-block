@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { PageHero } from "@/components/page-hero";
-import { Cta } from "@/components/cta";
-import { Reveal } from "@/components/motion/reveal";
+import { CtaBanner } from "@/components/cta-banner";
+import { Item, Reveal, Stagger } from "@/components/motion/reveal";
+import { Pill } from "@/components/ui/pill";
 import { waLink } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 };
 
 const perks = [
-  { t: "Free 1 set cetakan", d: "Bonus mould untuk setiap pembelian unit mesin. Pilih motif paving yang paling laku di daerah Anda." },
-  { t: "DP cukup 30%", d: "Sisa pembayaran dilunasi setelah mesin paving block siap dikirim. Modal awal lebih ringan." },
-  { t: "Garansi 1 tahun", d: "Full spare part dan service, ditambah training operator sampai produksi lancar." },
-  { t: "Kirim dan pasang", d: "Ke seluruh Indonesia. Teknisi kami merakit mesin langsung di lokasi Anda." },
+  { t: "Free 1 set cetakan", d: "Bonus mould untuk setiap pembelian unit mesin. Pilih motif paving yang paling laku di daerah Anda.", tone: "red" },
+  { t: "DP cukup 30%", d: "Sisa pembayaran dilunasi setelah mesin siap dikirim. Modal awal lebih ringan.", tone: "" },
+  { t: "Garansi 1 tahun", d: "Full spare part dan service, ditambah training operator sampai produksi lancar.", tone: "" },
+  { t: "Kirim & rakit", d: "Ke seluruh Indonesia. Teknisi kami merakit mesin langsung di lokasi Anda.", tone: "gold" },
 ];
 
 export default function PromoPage() {
@@ -26,48 +26,47 @@ export default function PromoPage() {
     <>
       <PageHero
         title="Free cetakan, DP cukup 30%"
-        lead="Ingin mempercepat produksi paving block? Mulai dengan mesin yang handal dan modal awal yang lebih ringan."
-        img="/brand/rh1e15-poster.webp"
-        alt="Poster mesin paving block RH1E15 The Legend Innovated"
+        lead="Mulai produksi paving dengan mesin yang handal dan modal awal yang lebih ringan."
+        img="/brand/cta-dunes.webp"
+        alt="Pita paving merah mengalir di lanskap"
         crumbs={[{ label: "Promo" }]}
-        actions={
-          <a href={waLink(msg)} target="_blank" rel="noopener noreferrer" className="btn primary">
-            Klaim promo <span className="arrow">→</span>
-          </a>
-        }
+        actions={<Pill href={waLink(msg)}>Klaim promo</Pill>}
       />
-
-      <section className="section wrap">
-        <div className="big-list">
-          {perks.map((p) => (
-            <Reveal key={p.t} className="big-item">
-              <h3>{p.t}</h3>
-              <p>{p.d}</p>
-            </Reveal>
+      <section className="shell sec">
+        <Stagger className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {perks.map((p, i) => (
+            <Item key={p.t} className={`card pad lift ${p.tone}`} style={{ minHeight: 280, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              <span className="label">0{i + 1}</span>
+              <div>
+                <h2 className="h-card">{p.t}</h2>
+                <p className="muted" style={{ marginTop: 8, fontSize: 15 }}>{p.d}</p>
+              </div>
+            </Item>
           ))}
+        </Stagger>
+      </section>
+      <section className="shell" style={{ paddingBottom: "clamp(40px, 6vw, 80px)" }}>
+        <div className="two inner" style={{ alignItems: "center" }}>
+          <Reveal className="l card" style={{ padding: 8 }}>
+            <div className="relative aspect-[904/1280] overflow-hidden" style={{ borderRadius: 14 }}>
+              <Image src="/brand/rh1e15-poster.webp" alt="Poster mesin RH1E15 The Legend Innovated" fill sizes="(min-width:1080px) 36vw, 92vw" className="object-cover" />
+            </div>
+          </Reveal>
+          <div className="r">
+            <Reveal as="p" className="label">Paling dicari</Reveal>
+            <Reveal as="h2" className="h-sec" delay={0.05} style={{ marginTop: 10 }}>RH1E15, The Legend Innovated</Reveal>
+            <Reveal as="p" className="muted" delay={0.1} style={{ marginTop: 14 }}>
+              Body plat tebal 10 cm, diameter hidrolis besar, multiple vibrasi, turbo blower pendingin vibrator, dan elektrik Schneider serta Fuji original.
+              Layak untuk spesifikasi proyek hingga K500.
+            </Reveal>
+            <Reveal delay={0.15} style={{ marginTop: 24, display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <Pill href="/mesin/rh1e15/">Spesifikasi RH1E15</Pill>
+              <Pill href={waLink(msg)} tone="ghost" icon={false}>Tanya promo</Pill>
+            </Reveal>
+          </div>
         </div>
       </section>
-
-      <section className="section wrap">
-        <div className="room flip">
-          <Reveal className="room-img tall" style={{ background: "var(--surface)" }}>
-            <Image src="/brand/rh1e15-hd.webp" alt="Mesin paving block RH1E15" fill sizes="(min-width:1080px) 40vw, 100vw" className="object-contain p-[8%]" />
-          </Reveal>
-          <Reveal className="room-txt" delay={0.1}>
-            <p className="small dim">Paling dicari</p>
-            <h3 style={{ marginTop: 8 }}>RH1E15, The Legend Innovated</h3>
-            <p className="muted">
-              Body plat tebal 10 cm, diameter hidrolis besar, multiple vibrasi, turbo blower pendingin vibrator, dan
-              elektrik Schneider serta Fuji original. Layak untuk spesifikasi proyek hingga K500.
-            </p>
-            <Link href="/mesin/rh1e15/" className="textlink">
-              Spesifikasi RH1E15 <span>→</span>
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      <Cta title="Klaim promonya" />
+      <CtaBanner title="Klaim promonya sekarang" message={msg} />
     </>
   );
 }
