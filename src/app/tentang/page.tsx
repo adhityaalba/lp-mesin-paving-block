@@ -27,8 +27,8 @@ export default function TentangPage() {
       <PageHero
         title="Bukan yang pertama, tapi yang terbaik"
         lead="Workshop kami di Puri, Mojokerto hanya berkonsentrasi pada satu hal: mesin press paving dan batako yang hasilnya padat dan kuat."
-        img="/brand/hero-scene.webp"
-        alt="Lanskap tenang dengan monumen tumpukan paving"
+        img="/brand/hero-yard.webp"
+        alt="Halaman pabrik paving dengan palet paving siap kirim"
         crumbs={[{ label: "Tentang" }]}
         actions={<Pill href={waLink()}>Bicara dengan kami</Pill>}
       />

@@ -19,7 +19,7 @@ const MOULDS: { key: MouldKey; label: string; note: string }[] = [
   { key: "kanstin", label: "Kanstin", note: "Pembatas jalan dan taman, dicetak dengan mesin yang sama." },
 ];
 const FINISHES: { key: FinishKey; label: string; swatch: string }[] = [
-  { key: "abu", label: "Abu natural", swatch: "#9c978d" },
+  { key: "abu", label: "Abu natural", swatch: "#a8a297" },
   { key: "merah", label: "Merah", swatch: "#c8242a" },
   { key: "emas", label: "Kuning", swatch: "#c9a63a" },
 ];

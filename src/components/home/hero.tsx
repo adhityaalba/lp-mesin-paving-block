@@ -45,7 +45,7 @@ export function Hero() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 2, ease }}
         >
-          <Image src="/brand/hero-scene.webp" alt="" fill preload sizes="100vw" />
+          <Image src="/brand/hero-yard.webp" alt="" fill preload sizes="100vw" />
         </motion.div>
 
         <motion.div className="hero-center" style={{ y: textY, opacity: textO }}>

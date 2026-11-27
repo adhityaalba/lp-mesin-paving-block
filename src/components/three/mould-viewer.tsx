@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { ContactShadows, Float, OrbitControls } from "@react-three/drei";
+import { ContactShadows, Float, OrbitControls, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 export type MouldKey = "holland" | "hexagon" | "cacing" | "kanstin";
 export type FinishKey = "abu" | "merah" | "emas";
 
-export const FINISH: Record<FinishKey, string> = { abu: "#9c978d", merah: "#c8242a", emas: "#c9a63a" };
+/** Pigment tints multiplied over the grey concrete texture. */
+export const FINISH: Record<FinishKey, string> = { abu: "#e4ded3", merah: "#e8483f", emas: "#f0cf5c" };
 
 /** Outlines of the paving shapes, in decimetres (1 unit = 10 cm). */
 function shapeFor(key: MouldKey): { shape: THREE.Shape; depth: number } {
@@ -69,7 +70,20 @@ function Piece({ mould, finish }: { mould: MouldKey; finish: FinishKey }) {
     g.center();
     return g;
   }, [mould]);
-  const material = useMemo(() => new THREE.MeshStandardMaterial({ roughness: 0.88, metalness: 0.02 }), []);
+  // Real concrete surface: photographed aggregate as colour map + the same image as bump map.
+  const tex = useTexture("/tex/concrete.jpg");
+  const material = useMemo(() => {
+    const map = tex.clone();
+    map.colorSpace = THREE.SRGBColorSpace;
+    const bump = tex.clone();
+    for (const t of [map, bump]) {
+      t.wrapS = t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(0.9, 0.9);
+      t.anisotropy = 8;
+      t.needsUpdate = true;
+    }
+    return new THREE.MeshStandardMaterial({ map, bumpMap: bump, bumpScale: 2.2, roughness: 0.96, metalness: 0 });
+  }, [tex]);
 
   useEffect(() => {
     material.color.set(FINISH[finish]);
@@ -126,11 +140,14 @@ export default function MouldViewer({ mould, finish }: { mould: MouldKey; finish
       >
         <ambientLight intensity={0.7} />
         <hemisphereLight args={["#fff6e6", "#d9cdb8", 0.6]} />
-        <directionalLight position={[4, 6, 3]} intensity={2.2} castShadow shadow-mapSize={[1024, 1024]} />
+        <directionalLight position={[4, 6, 3]} intensity={2.6} castShadow shadow-mapSize={[1024, 1024]} />
+        <directionalLight position={[0, 1, 6]} intensity={0.5} />
         <directionalLight position={[-5, 2, -3]} intensity={0.6} color="#ffd9a8" />
-        <Float speed={reduced ? 0 : 1.6} rotationIntensity={reduced ? 0 : 0.35} floatIntensity={reduced ? 0 : 0.8}>
-          <Piece mould={mould} finish={finish} />
-        </Float>
+        <Suspense fallback={null}>
+          <Float speed={reduced ? 0 : 1.6} rotationIntensity={reduced ? 0 : 0.35} floatIntensity={reduced ? 0 : 0.8}>
+            <Piece mould={mould} finish={finish} />
+          </Float>
+        </Suspense>
         <ContactShadows position={[0, -1.25, 0]} opacity={0.35} scale={8} blur={2.6} far={3} />
         <OrbitControls enableZoom={false} enablePan={false} autoRotate={!reduced} autoRotateSpeed={0.8} minPolarAngle={0.6} maxPolarAngle={1.7} />
       </Canvas>

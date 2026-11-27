@@ -14,8 +14,8 @@ const STEPS = [
     t: "Konsultasi gratis",
     d: "Ceritakan target produksi, luas lahan, dan daya listrik. Kami rekomendasikan tipe mesin yang pas, tanpa kewajiban membeli.",
     pts: ["Target paving & batako per hari", "Lahan efektif ± 1.000 m²", "Listrik 3 phase, 25–31 kW"],
-    img: "/brand/hero-scene.webp",
-    alt: "Lanskap tenang dengan monumen tumpukan paving",
+    img: "/brand/hero-yard.webp",
+    alt: "Halaman pabrik paving dengan palet paving siap kirim",
     tone: "t-card",
   },
   {
