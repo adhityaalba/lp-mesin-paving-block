@@ -15,6 +15,7 @@ export function PageHero({
   img,
   alt,
   contain = false,
+  product,
   crumbs,
   actions,
 }: {
@@ -23,6 +24,8 @@ export function PageHero({
   img: string;
   alt: string;
   contain?: boolean;
+  /** Studio product shot: fills the right side, card takes its backdrop colour. */
+  product?: { bg: string };
   crumbs: { href?: string; label: string }[];
   actions?: ReactNode;
 }) {
@@ -34,9 +37,12 @@ export function PageHero({
 
   return (
     <section className="ph" ref={ref}>
-      <motion.div className={`ph-card ${contain ? "plain" : ""}`} style={{ scale }}>
+      <motion.div
+        className={`ph-card ${contain ? "plain" : ""} ${product ? "product" : ""}`}
+        style={{ scale, ...(product ? ({ background: product.bg, ["--pbg" as string]: product.bg } as object) : {}) }}
+      >
         <motion.div
-          className={`bg ${contain ? "contain" : ""}`}
+          className={`bg ${contain ? "contain" : ""} ${product ? "product" : ""}`}
           style={{ y }}
           initial={{ scale: 1.15, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

@@ -268,6 +268,10 @@
 .ph-card > .bg.contain { inset: 10% 6% 4% 46%; }
 .ph-card > .bg.contain img { object-fit: contain; filter: drop-shadow(0 30px 30px rgba(30, 20, 10, 0.3)); }
 .ph-card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(241, 236, 227, 0.92) 0%, rgba(241, 236, 227, 0.6) 40%, rgba(241, 236, 227, 0) 70%); }
+/* Product shot: box keeps the photo's 4:5 ratio so the soft edge mask meets the photo edge exactly. */
+.ph-card > .bg.product { inset: 2% 6% 0 auto; aspect-ratio: 4 / 5; }
+.ph-card > .bg.product img { object-fit: cover; -webkit-mask-image: radial-gradient(closest-side at 50% 50%, #000 74%, transparent 100%); mask-image: radial-gradient(closest-side at 50% 50%, #000 74%, transparent 100%); }
+.ph-card.product::after { background: linear-gradient(90deg, var(--pbg) 0%, var(--pbg) 38%, transparent 56%); }
 .ph-card.plain::after { background: radial-gradient(120% 120% at 80% 100%, rgba(229, 217, 197, 0) 0%, rgba(233, 227, 215, 0.2) 50%, rgba(245, 241, 233, 0.6) 100%); }
 .ph-txt { padding: clamp(22px, 4vw, 64px); max-width: 720px; }
 .crumb { display: flex; gap: 8px; flex-wrap: wrap; font-size: 13px; color: var(--muted); margin-bottom: 22px; }
@@ -350,6 +354,11 @@
   .row-card h3, .row-card p { grid-column: 1 / -1; }
   .foot-grid { grid-template-columns: 1fr 1fr; }
   .ph-card > .bg.contain { inset: 4% 4% 40% 30%; }
+  /* Mobile product hero: photo on top in normal flow, copy underneath. */
+  .ph-card.product { flex-direction: column; align-items: stretch; }
+  .ph-card > .bg.product { position: relative; inset: auto; width: min(84%, 420px); margin: 72px auto 0; aspect-ratio: 4 / 5; z-index: 0; }
+  .ph-card.product::after { display: none; }
+  .ph-card.product .ph-txt { padding-top: 4px; }
   .ph-card::after { background: linear-gradient(0deg, rgba(241, 236, 227, 0.95) 0%, rgba(241, 236, 227, 0.7) 45%, rgba(241, 236, 227, 0) 75%); }
 }
 @media (max-width: 720px) {

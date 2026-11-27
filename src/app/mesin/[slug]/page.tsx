@@ -58,7 +58,6 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
   if (!m) notFound();
   const others = machines.filter((x) => x.slug !== m.slug);
   const msg = `Halo CV Multi Baja Technic, saya tertarik mesin ${m.code} (${m.nickname}). Boleh minta info harga & ketersediaan?`;
-  const cutout = !m.image.includes("hr6e12");
   const strength = parseInt(m.highlight.strength.replace("K", ""), 10);
 
   const productJsonLd = {
@@ -77,9 +76,9 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
       <PageHero
         title={`${m.code}, ${m.nickname}`}
         lead={m.summary}
-        img={m.image}
-        alt={m.imageAlt}
-        contain={cutout}
+        img={m.studio}
+        alt={`Foto studio mesin paving block ${m.code} ${m.nickname}`}
+        product={{ bg: m.studioBg }}
         crumbs={[{ href: "/mesin/", label: "Mesin" }, { label: m.code }]}
         actions={
           <>

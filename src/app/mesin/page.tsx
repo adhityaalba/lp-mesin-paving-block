@@ -21,9 +21,9 @@ export default function MesinPage() {
       <PageHero
         title="Tiga mesin cetak, satu standar padat"
         lead="Semua semi-automatic dengan hidrolik dan multiple vibrasi. Satu mesin mencetak paving, batako, dan kanstin, cukup ganti cetakan."
-        img="/brand/rh1e15-hd.webp"
-        alt="Mesin paving block RH1E15"
-        contain
+        img="/brand/studio-rh1e15.webp"
+        alt="Foto studio mesin paving block RH1E15"
+        product={{ bg: "#ece2cf" }}
         crumbs={[{ label: "Mesin" }]}
         actions={
           <>

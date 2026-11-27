@@ -9,6 +9,9 @@ export type Machine = {
   description: string[];
   image: string;
   imageAlt: string;
+  /** Studio product shot (generated from the real machine photos) and its backdrop colour. */
+  studio: string;
+  studioBg: string;
   gallery: { src: string; alt: string }[];
   video?: string;
   highlight: { strength: string; output: string; cycle: string; power: string };
@@ -25,6 +28,8 @@ export type Machine = {
 export const machines: Machine[] = [
   {
     slug: "rh1e15",
+    studio: "/brand/studio-rh1e15.webp",
+    studioBg: "#ece2cf",
     code: "RH1E15",
     nickname: "The Legend Innovated",
     tagline: "Andalan proyek K500",
@@ -70,6 +75,8 @@ export const machines: Machine[] = [
   },
   {
     slug: "rh1s12",
+    studio: "/brand/studio-rh1s12.webp",
+    studioBg: "#ede1cd",
     code: "RH1S12",
     nickname: "The Great Innovated",
     tagline: "Paket pabrik siap jalan",
@@ -114,6 +121,8 @@ export const machines: Machine[] = [
   },
   {
     slug: "hr6e12",
+    studio: "/brand/studio-hr6e12.webp",
+    studioBg: "#e9dcc5",
     code: "HR6E12",
     nickname: "The Best Innovated",
     tagline: "Favorit investor pemula",

@@ -75,22 +75,14 @@ export function MachinesHz() {
           </div>
 
           {machines.map((m, i) => {
-            const cutout = !m.image.includes("hr6e12");
             return (
               <article key={m.slug} className="mcard" style={{ scrollSnapAlign: "center" }}>
-                <div className="mcard-vis">
-                  <span className="m-code" aria-hidden>{m.code}</span>
-                  {cutout ? (
-                    <div className="m-img m-move">
-                      <Image src={m.image} alt={m.imageAlt} fill sizes="(min-width:1080px) 40vw, 88vw" />
+                <div className="mcard-vis" style={{ background: m.studioBg }}>
+                  <div className="m-photo">
+                    <div className="absolute inset-[2%_-4%_0] m-move">
+                      <Image src={m.studio} alt={`Foto studio mesin ${m.code} ${m.nickname}`} fill sizes="(min-width:1080px) 46vw, 88vw" style={{ objectFit: "contain", objectPosition: "50% 100%" }} />
                     </div>
-                  ) : (
-                    <div className="m-photo">
-                      <div className="absolute inset-[-10%] m-move">
-                        <Image src={m.image} alt={m.imageAlt} fill sizes="(min-width:1080px) 46vw, 88vw" />
-                      </div>
-                    </div>
-                  )}
+                  </div>
                   <span className="badge" style={{ position: "absolute", left: 18, bottom: 18 }}>
                     <span className="dot gold" /> 0{i + 1} / 03
                   </span>
