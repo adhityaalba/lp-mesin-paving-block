@@ -22,8 +22,8 @@ const STEPS = [
     t: "MOU & DP 30%",
     d: "Kesepakatan dituangkan dalam MOU bermaterai. Cukup DP 30% di awal, sisanya dilunasi saat mesin siap dikirim.",
     pts: ["DP 30% saja", "Pelunasan saat siap kirim", "Bonus 1 set cetakan"],
-    img: "/brand/rh1e15-poster.webp",
-    alt: "Poster mesin RH1E15 The Legend Innovated",
+    img: "/brand/stack.webp",
+    alt: "Tumpukan paving abu, merah, dan kuning",
     tone: "t-red",
   },
   {
@@ -46,8 +46,8 @@ const STEPS = [
     t: "Training sampai lancar",
     d: "Operator dilatih dari takaran campuran bahan baku sampai mesin berproduksi lancar. Pabrik baru bisa dibantu suplai tenaga produksi.",
     pts: ["Takaran campuran & operasi", "Pendampingan sampai lancar", "Hasil K350 – K500"],
-    img: "/brand/stack.webp",
-    alt: "Tumpukan paving hasil produksi",
+    img: "/brand/herringbone.webp",
+    alt: "Paving herringbone yang baru dipasang",
     tone: "t-card",
   },
   {
@@ -72,12 +72,16 @@ export function ProcessStack() {
         cards.forEach((card, i) => {
           const next = cards[i + 1];
           if (!next) return;
-          gsap.to(card, {
-            scale: 0.9 + i * 0.012,
-            filter: "brightness(0.82)",
-            ease: "none",
-            scrollTrigger: { trigger: next, start: "top bottom", end: "top 20%", scrub: true },
-          });
+          // Only scale: animating filter from "none" made GSAP start at brightness(0) (black cards).
+          gsap.fromTo(
+            card,
+            { scale: 1 },
+            {
+              scale: 0.92 + i * 0.01,
+              ease: "none",
+              scrollTrigger: { trigger: next, start: "top bottom", end: "top 20%", scrub: true },
+            },
+          );
         });
       });
     },
