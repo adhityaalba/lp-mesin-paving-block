@@ -39,7 +39,7 @@ export const trustPoints = [
   "Kuat tekan K350–K500",
   "Garansi 1 tahun",
   "DP 30%",
-  "Free 1 set cetakan",
+  "Gratis setting dan training di lokasi",
   "Training operator",
   "Kirim seluruh Indonesia",
   "Material baru standar SNI",
@@ -69,6 +69,6 @@ export const faqs = [
   },
   {
     q: "Mesin bisa mencetak produk apa saja?",
-    a: "Paving block berbagai motif (holland, segi enam, cacing, dll.), batako, dan kanstin — cukup dengan mengganti cetakan (mould). Setiap pembelian mendapat bonus 1 set cetakan.",
+    a: "Paving block berbagai motif (holland, segi enam, cacing, dll.), batako, dan kanstin — cukup dengan mengganti cetakan (mould). Setiap pembelian mendapat gratis setting dan training di lokasi.",
   },
 ] as const;

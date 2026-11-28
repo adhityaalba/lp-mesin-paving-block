@@ -14,6 +14,7 @@ test("seed retains all records and only references existing public image files",
     assert.equal(display.image, `/${product.image}`);
     assert.equal(display.studio, `/${product.studio}`);
     assert.deepEqual(display.calc, product.calc);
+    if (product.video) assert.equal(display.video, `/${product.video}`);
   }
 });
 test("public file references reject remote, embedded and traversal paths", () => {
@@ -33,4 +34,10 @@ test("article HTML strips executable markup and restores inline public image URL
 test("invalid product capacity cannot reach the calculator", async () => {
   const { products } = await sourceContent();
   assert.throws(() => storedMachineSchema.parse({ ...products[0], calc: { pcsPerCycle: 15, cycleSeconds: 0 } }));
+});
+test("product video references cannot load remote or embedded content", async () => {
+  const { products } = await sourceContent();
+  for (const video of ["https://example.com/track.mp4", "data:video/mp4;base64,abc", "../private.mp4"]) {
+    assert.throws(() => storedMachineSchema.parse({ ...products[0], video }));
+  }
 });

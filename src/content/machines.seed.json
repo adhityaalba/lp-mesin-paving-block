@@ -1,7 +1,7 @@
 [
   {
     "slug": "rh1e15",
-    "studio": "/brand/studio-rh1e15.webp",
+    "studio": "media/mesin/rh1e15-depan.jpg",
     "studioBg": "#ece2cf",
     "code": "RH1E15",
     "nickname": "The Legend Innovated",
@@ -11,20 +11,20 @@
       "Generasi inovasi dari CV Multi Baja Technic. RH1E15 dirancang dengan body plat tebal 10 cm dan diameter hidrolis besar sehingga tekanan pres mencapai kekuatan maksimal.",
       "Pengadukan bahan baku di cetakan dibantu multiple vibrasi — kepadatan produk paving tidak perlu diragukan. Dilengkapi turbo blower pendingin vibrator serta komponen elektrik Schneider dan Fuji original."
     ],
-    "image": "/brand/rh1e15-hd.webp",
-    "imageAlt": "Mesin paving block RH1E15 The Legend Innovated warna merah kuning",
+    "image": "media/mesin/rh1e15-depan.jpg",
+    "imageAlt": "Mesin RH1E15 tampak depan di workshop Multi Baja Technic",
     "gallery": [
       {
-        "src": "/brand/rh1e15-poster.webp",
-        "alt": "Brosur RH1E15 The Legend Innovated"
+        "src": "media/mesin/rh1e15-depan.jpg",
+        "alt": "Mesin RH1E15 tampak depan di workshop Multi Baja Technic"
       },
       {
-        "src": "/brand/detail-strip.webp",
-        "alt": "Detail rotor vibrator, filter oli, dan vibrasi atas RH1E15"
+        "src": "media/mesin/rh1e15-samping.jpg",
+        "alt": "Mesin RH1E15 tampak samping dengan sistem hidrolik"
       },
       {
-        "src": "/brand/rh1e15-brochure.webp",
-        "alt": "Spesifikasi dan layout area produksi RH1E15"
+        "src": "media/mesin/rh1e15-workshop.jpg",
+        "alt": "Mesin RH1E15 dengan dudukan palet di workshop"
       }
     ],
     "highlight": {
@@ -106,7 +106,7 @@
   },
   {
     "slug": "rh1s12",
-    "studio": "/brand/studio-rh1s12.webp",
+    "studio": "media/mesin/rh1s12-depan.jpg",
     "studioBg": "#ede1cd",
     "code": "RH1S12",
     "nickname": "The Great Innovated",
@@ -116,16 +116,20 @@
       "The Great Innovated RH1S12 lebih dari sekadar mesin — ini paket usaha lengkap yang siap beroperasi sejak hari pertama.",
       "Sudah termasuk Mixer Worm Gear WPO 200 bertenaga 15 HP untuk adukan cepat dan merata, serta conveyor 7,5 meter untuk suplai material tanpa henti. Mesin utamanya memakai vibrasi superior dan komponen hidrolis premium untuk cetakan presisi."
     ],
-    "image": "/brand/rh1s12-cutout.webp",
-    "imageAlt": "Mesin paving block RH1S12 The Great Innovated",
+    "image": "media/mesin/rh1s12-depan.jpg",
+    "imageAlt": "Mesin RH1S12 tampak depan di workshop Multi Baja Technic",
     "gallery": [
       {
-        "src": "/brand/rh1s12-studio.webp",
-        "alt": "Mesin RH1S12 tampak samping"
+        "src": "media/mesin/rh1s12-depan.jpg",
+        "alt": "Mesin RH1S12 tampak depan di workshop Multi Baja Technic"
       },
       {
-        "src": "/brand/detail-strip.webp",
-        "alt": "Detail komponen vibrasi dan hidrolik"
+        "src": "media/mesin/rh1s12-detail.jpg",
+        "alt": "Detail cetakan dan sistem hidrolik mesin RH1S12"
+      },
+      {
+        "src": "media/mesin/rh1s12-workshop.jpg",
+        "alt": "Deretan mesin di workshop dengan RH1S12 di bagian depan"
       }
     ],
     "highlight": {
@@ -203,7 +207,8 @@
       }
     ],
     "idealFor": "Pengusaha yang ingin paket pabrik lengkap",
-    "oldPath": "/the-great-innovated-rh1s12/"
+    "oldPath": "/the-great-innovated-rh1s12/",
+    "video": "media/mesin/rh1s12-workshop.mp4"
   },
   {
     "slug": "hr6e12",

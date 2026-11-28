@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 import { Magnetic, SplitTitle } from "@/components/motion/reveal";
 import { Pill } from "@/components/ui/pill";
 import { ArrowUR, WhatsAppIcon } from "@/components/ui/icons";
 import { waLink } from "@/lib/site";
+import type { Machine } from "@/lib/content-schema";
+import { useDesktopMotion } from "@/components/motion/use-desktop-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -17,15 +19,15 @@ const CHIPS = [
   { t: "Elektrik Fuji original", cls: "c3", d: 1.6 },
 ];
 
-const TRUST = ["Garansi 1 tahun", "DP 30%", "Free 1 set cetakan", "Kirim se-Indonesia"];
+const TRUST = ["Garansi 1 tahun", "DP 30%", "Gratis setting dan training di lokasi", "Kirim se-Indonesia"];
 
-export function Hero() {
+export function Hero({ machine }: { machine: Pick<Machine, "image" | "imageAlt"> }) {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const desktopMotion = useDesktopMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "18%"]);
-  const copyY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, 90]);
-  const stageY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, -60]);
+  const bgY = useTransform(scrollYProgress, [0, 1], desktopMotion ? ["0%", "18%"] : ["0%", "0%"]);
+  const copyY = useTransform(scrollYProgress, [0, 1], desktopMotion ? [0, 90] : [0, 0]);
+  const stageY = useTransform(scrollYProgress, [0, 1], desktopMotion ? [0, -60] : [0, 0]);
 
   // 3D tilt of the product stage toward the cursor.
   const mx = useMotionValue(0);
@@ -76,7 +78,7 @@ export function Hero() {
           animate={{ opacity: 1, clipPath: "inset(0% 0% 0% 0% round 32px)" }}
           transition={{ duration: 1.5, ease, delay: 0.3 }}
           onPointerMove={(e) => {
-            if (reduce || e.pointerType !== "mouse") return;
+            if (!desktopMotion || e.pointerType !== "mouse") return;
             const r = e.currentTarget.getBoundingClientRect();
             mx.set((e.clientX - r.left) / r.width - 0.5);
             my.set((e.clientY - r.top) / r.height - 0.5);
@@ -91,26 +93,28 @@ export function Hero() {
             K500
           </motion.span>
           <div className="stage-floor" aria-hidden />
-          <motion.div className="stage-machine" style={{ rotateX: rx, rotateY: ry }} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.5, ease, delay: 0.8 }}>
-            <motion.div className="absolute inset-0" animate={reduce ? undefined : { y: [0, -8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}>
-              <Image src="/brand/rh1e15-hd.webp" alt="Mesin paving block RH1E15 The Legend Innovated" fill preload sizes="(min-width:1080px) 30vw, 70vw" />
+          <motion.div className="stage-machine" style={{ rotateX: desktopMotion ? rx : 0, rotateY: desktopMotion ? ry : 0 }} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.5, ease, delay: 0.8 }}>
+            <motion.div className="absolute inset-0" animate={desktopMotion ? { y: [0, -8, 0] } : { y: 0 }} transition={{ duration: desktopMotion ? 6 : 0, repeat: desktopMotion ? Infinity : 0, ease: "easeInOut" }}>
+              <Image src={machine.image} alt={machine.imageAlt} fill preload sizes="(min-width:1080px) 30vw, 70vw" />
             </motion.div>
           </motion.div>
+          <div className="stage-chips">
           {CHIPS.map((c) => (
             <motion.span
               key={c.t}
               className={`stage-chip glass ${c.cls}`}
               initial={{ opacity: 0, scale: 0.8 }}
-              animate={reduce ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1, y: [0, -6, 0] }}
+              animate={desktopMotion ? { opacity: 1, scale: 1, y: [0, -6, 0] } : { opacity: 1, scale: 1, y: 0 }}
               transition={{
                 opacity: { duration: 0.6, delay: 1.4 + c.d * 0.2 },
                 scale: { duration: 0.6, delay: 1.4 + c.d * 0.2 },
-                y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: c.d },
+                y: { duration: desktopMotion ? 5 : 0, repeat: desktopMotion ? Infinity : 0, ease: "easeInOut", delay: desktopMotion ? c.d : 0 },
               }}
             >
               <span className="dot gold" /> {c.t}
             </motion.span>
           ))}
+          </div>
           <Link href="/mesin/rh1e15/" className="stage-bar glass">
             <span>
               <span className="label" style={{ color: "var(--muted)" }}>Tipe unggulan</span>

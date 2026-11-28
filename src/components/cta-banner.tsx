@@ -6,7 +6,7 @@ import { waLink } from "@/lib/site";
 
 export function CtaBanner({
   title = "Cetak paving pertama Anda bulan ini.",
-  body = "Free 1 set cetakan, DP cukup 30%. Konsultasi gratis dengan produsen langsung.",
+  body = "Gratis setting dan training di lokasi, DP cukup 30%. Konsultasi gratis dengan produsen langsung.",
   message,
 }: {
   title?: string;

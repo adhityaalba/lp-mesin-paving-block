@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, type ReactNode } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { SplitTitle } from "@/components/motion/reveal";
+import { useDesktopMotion } from "@/components/motion/use-desktop-motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -24,16 +25,16 @@ export function PageHero({
   img: string;
   alt: string;
   contain?: boolean;
-  /** Studio product shot: fills the right side, card takes its backdrop colour. */
+  /** Product photo on the right, with a matching card background. */
   product?: { bg: string };
   crumbs: { href?: string; label: string }[];
   actions?: ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const desktopMotion = useDesktopMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "12%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 1], desktopMotion ? ["0%", "12%"] : ["0%", "0%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], desktopMotion ? [1, 0.95] : [1, 1]);
 
   return (
     <section className="ph" ref={ref}>

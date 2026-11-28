@@ -5,27 +5,30 @@ import { CtaBanner } from "@/components/cta-banner";
 import { Item, Reveal, Stagger } from "@/components/motion/reveal";
 import { Pill } from "@/components/ui/pill";
 import { waLink } from "@/lib/site";
+import { getMachine } from "@/lib/machines";
 
 export const metadata: Metadata = {
-  title: "Promo Mesin Paving Block — Free 1 Set Cetakan, DP 30%",
+  title: "Promo Mesin Paving Block — Gratis Setting dan Training, DP 30%",
   description:
-    "Spesial promo mesin paving block CV Multi Baja Technic: free 1 set cetakan (mould), DP 30% dan sisa dibayar saat mesin siap kirim. Garansi 1 tahun.",
+    "Spesial promo mesin paving block CV Multi Baja Technic: gratis setting dan training di lokasi, DP 30% dan sisa dibayar saat mesin siap kirim. Garansi 1 tahun.",
   alternates: { canonical: "/promo/" },
 };
 
 const perks = [
-  { t: "Free 1 set cetakan", d: "Bonus mould untuk setiap pembelian unit mesin. Pilih motif paving yang paling laku di daerah Anda.", tone: "red" },
+  { t: "Gratis setting dan training di lokasi", d: "Setting mesin dan training operator di lokasi Anda tanpa biaya tambahan.", tone: "red" },
   { t: "DP cukup 30%", d: "Sisa pembayaran dilunasi setelah mesin siap dikirim. Modal awal lebih ringan.", tone: "" },
   { t: "Garansi 1 tahun", d: "Full spare part dan service, ditambah training operator sampai produksi lancar.", tone: "" },
   { t: "Kirim & rakit", d: "Ke seluruh Indonesia. Teknisi kami merakit mesin langsung di lokasi Anda.", tone: "gold" },
 ];
 
-export default function PromoPage() {
-  const msg = "Halo, saya mau klaim promo free 1 set cetakan + DP 30%. Mohon info mesin & harganya.";
+export default async function PromoPage() {
+  const featured = await getMachine("rh1e15");
+  if (!featured) throw new Error("Featured product RH1E15 is missing");
+  const msg = "Halo, saya mau klaim promo gratis setting dan training di lokasi + DP 30%. Mohon info mesin & harganya.";
   return (
     <>
       <PageHero
-        title="Free cetakan, DP cukup 30%"
+        title="Gratis setting dan training, DP 30%"
         lead="Mulai produksi paving dengan mesin yang handal dan modal awal yang lebih ringan."
         img="/brand/cta-dunes.webp"
         alt="Pita paving merah mengalir di lanskap"
@@ -49,7 +52,7 @@ export default function PromoPage() {
         <div className="two inner" style={{ alignItems: "center" }}>
           <Reveal className="l card" style={{ padding: 8 }}>
             <div className="relative aspect-[904/1280] overflow-hidden" style={{ borderRadius: 14 }}>
-              <Image src="/brand/rh1e15-poster.webp" alt="Poster mesin RH1E15 The Legend Innovated" fill sizes="(min-width:1080px) 36vw, 92vw" className="object-cover" />
+              <Image src={featured.image} alt={featured.imageAlt} fill sizes="(min-width:1080px) 36vw, 92vw" className="object-contain" />
             </div>
           </Reveal>
           <div className="r">

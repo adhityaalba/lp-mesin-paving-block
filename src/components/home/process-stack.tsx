@@ -21,7 +21,7 @@ const STEPS = [
   {
     t: "MOU & DP 30%",
     d: "Kesepakatan dituangkan dalam MOU bermaterai. Cukup DP 30% di awal, sisanya dilunasi saat mesin siap dikirim.",
-    pts: ["DP 30% saja", "Pelunasan saat siap kirim", "Bonus 1 set cetakan"],
+    pts: ["DP 30% saja", "Pelunasan saat siap kirim", "Gratis setting dan training di lokasi"],
     img: "/brand/stack.webp",
     alt: "Tumpukan paving abu, merah, dan kuning",
     tone: "t-red",
@@ -30,8 +30,8 @@ const STEPS = [
     t: "Fabrikasi di workshop",
     d: "Material baru berstandar SNI dan komponen elektrik original. Setiap unit dirakit dan diuji di workshop Mojokerto.",
     pts: ["Material baru standar SNI", "Elektrik Fuji & Schneider", "Diuji sebelum dikirim"],
-    img: "/brand/hr6e12-22.webp",
-    alt: "Panel kontrol dan power pack mesin di workshop",
+    img: "/media/mesin/rh1s12-workshop.jpg",
+    alt: "Deretan mesin di workshop dengan RH1S12 di bagian depan",
     tone: "t-card",
   },
   {
@@ -67,7 +67,7 @@ export function ProcessStack() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      mm.add("(min-width: 1081px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)", () => {
         const cards = gsap.utils.toArray<HTMLElement>(".scard");
         cards.forEach((card, i) => {
           const next = cards[i + 1];
@@ -84,6 +84,7 @@ export function ProcessStack() {
           );
         });
       });
+      return () => mm.revert();
     },
     { scope: root },
   );

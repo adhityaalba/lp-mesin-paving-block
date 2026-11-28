@@ -18,13 +18,15 @@ export const metadata: Metadata = {
 
 export default async function MesinPage() {
   const machines = await getMachines();
+  const featured = machines.find((machine) => machine.slug === "rh1e15");
+  if (!featured) throw new Error("Featured product RH1E15 is missing");
   return (
     <>
       <PageHero
         title="Tiga mesin cetak, satu standar padat"
         lead="Semua semi-automatic dengan hidrolik dan multiple vibrasi. Satu mesin mencetak paving, batako, dan kanstin, cukup ganti cetakan."
-        img="/brand/studio-rh1e15.webp"
-        alt="Foto studio mesin paving block RH1E15"
+        img={featured.image}
+        alt={featured.imageAlt}
         product={{ bg: "#ece2cf" }}
         crumbs={[{ label: "Mesin" }]}
         actions={

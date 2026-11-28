@@ -143,13 +143,14 @@ export function Parallax({ children, className, amount = 10, style }: { children
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      mm.add("(min-width: 1081px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)", () => {
         gsap.fromTo(
           box.current!.firstElementChild,
           { yPercent: -amount, scale: 1.08 },
           { yPercent: amount, scale: 1, ease: "none", scrollTrigger: { trigger: box.current, start: "top bottom", end: "bottom top", scrub: true } },
         );
       });
+      return () => mm.revert();
     },
     { scope: box },
   );

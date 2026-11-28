@@ -27,6 +27,7 @@ export function Pill({
       {icon !== false && <span className="ico">{icon ?? <ArrowUR />}</span>}
     </>
   );
+  if (href.startsWith("#")) return <a href={href} className={cls}>{body}</a>;
   if (href.startsWith("http") || href.startsWith("tel:") || href.startsWith("mailto:")) {
     const ext = href.startsWith("http");
     return (

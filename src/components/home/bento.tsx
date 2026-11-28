@@ -61,7 +61,7 @@ export function Bento() {
         <Item className="card pad b-3d lift" style={{ display: "flex", flexDirection: "column", minHeight: 560 }}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span className="label">01 / Motif cetakan</span>
-            <span className="label">Putar & geser</span>
+            <span className="label hidden min-[1081px]:inline">Putar & geser</span>
           </div>
           <div style={{ position: "relative", flex: 1, minHeight: 280, margin: "8px -12px" }}>
             <MouldViewer mould={mould} finish={finish} />
@@ -81,7 +81,7 @@ export function Bento() {
                 </button>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 10, alignItems: "center" }} role="radiogroup" aria-label="Warna paving">
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center" }} role="radiogroup" aria-label="Warna paving">
               {FINISHES.map((f) => (
                 <button
                   key={f.key}
@@ -92,7 +92,7 @@ export function Bento() {
                   title={f.label}
                   onClick={() => setFinish(f.key)}
                   style={{
-                    width: 28, height: 28, borderRadius: 99, background: f.swatch, cursor: "pointer",
+                    width: 40, height: 40, flex: "none", borderRadius: 99, background: f.swatch, cursor: "pointer",
                     boxShadow: finish === f.key ? "0 0 0 3px var(--card), 0 0 0 5px var(--ink)" : "inset 0 0 0 1px rgba(0,0,0,.1)",
                     transition: "box-shadow .25s",
                   }}
@@ -176,7 +176,7 @@ export function Bento() {
           <span className="label">06 / Spesial promo</span>
           <div>
             <h3 style={{ fontSize: "clamp(32px, 3.4vw, 52px)", letterSpacing: "-0.045em", lineHeight: 0.98 }}>
-              Free 1 set cetakan. DP cukup 30%.
+              Gratis setting dan training di lokasi. DP cukup 30%.
             </h3>
             <p style={{ marginTop: 12, fontSize: 15, maxWidth: "40ch" }}>Sisa pembayaran dilunasi saat mesin siap dikirim. Kerja sama diikat MOU bermaterai.</p>
           </div>

@@ -21,9 +21,11 @@ const faqJsonLd = {
 
 export default async function Home() {
   const [machines, posts] = await Promise.all([getMachines(), getPosts()]);
+  const featured = machines.find((machine) => machine.slug === "rh1e15");
+  if (!featured) throw new Error("Featured product RH1E15 is missing");
   return (
     <>
-      <Hero />
+      <Hero machine={{ image: featured.image, imageAlt: featured.imageAlt }} />
       <Stats />
       <Bento />
       <MachinesHz machines={machines} />

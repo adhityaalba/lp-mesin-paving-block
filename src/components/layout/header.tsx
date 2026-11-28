@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Pill } from "@/components/ui/pill";
 import { nav, site, waLink } from "@/lib/site";
+import { getLenis } from "@/components/providers/smooth-scroll";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -25,13 +26,14 @@ export function Header() {
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
   const last = useRef(0);
+  const sheet = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const on = () => {
       const y = window.scrollY;
       setSolid(y > 60);
       if (y > 500 && y > last.current + 4) setHide(true);
-      if (y < last.current - 4) setHide(false);
+      if (y <= 500 || y < last.current - 4) setHide(false);
       last.current = y;
     };
     on();
@@ -45,16 +47,44 @@ export function Header() {
     setOpen(false);
   }
   useEffect(() => {
-    document.documentElement.style.overflow = open ? "hidden" : "";
+    if (!open) return;
+    const previousOverflow = document.documentElement.style.overflow;
+    const previousFocus = document.activeElement;
+    document.documentElement.style.overflow = "hidden";
+    getLenis()?.stop();
+    const focusable = () => sheet.current?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])");
+    focusable()?.[0]?.focus({ preventScroll: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Tab") return;
+      const elements = focusable();
+      if (!elements?.length) return;
+      const first = elements[0];
+      const last = elements[elements.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.documentElement.style.overflow = previousOverflow;
+      getLenis()?.start();
+      if (previousFocus instanceof HTMLElement) previousFocus.focus({ preventScroll: true });
+    };
   }, [open]);
 
   return (
     <>
       <motion.header
-        className={`hdr ${solid ? "solid" : ""} ${hide && !open ? "hide" : ""}`}
+        className={`hdr ${solid ? "solid" : ""}`}
         initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, ease, delay: 0.2 }}
+        animate={{ y: hide && !open ? "-120%" : 0, opacity: 1 }}
+        transition={{ duration: 0.3, ease }}
       >
         <div className="hdr-in">
           <Brand />
@@ -83,8 +113,10 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={sheet}
             id="sheet"
             className="sheet"
+            data-lenis-prevent
             role="dialog"
             aria-modal="true"
             aria-label="Menu"
@@ -102,7 +134,7 @@ export function Header() {
             <nav aria-label="Menu seluler">
               {[{ href: "/", label: "Beranda" }, ...nav].map((l, i) => (
                 <motion.div key={l.href} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.05, duration: 0.7, ease }}>
-                  <Link href={l.href}>
+                  <Link href={l.href} onClick={() => setOpen(false)}>
                     {l.label} <small>0{i + 1}</small>
                   </Link>
                 </motion.div>

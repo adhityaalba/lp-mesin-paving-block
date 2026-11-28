@@ -32,7 +32,7 @@ export function FloatingWA({ machines }: { machines: MachineLink[] }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="pill wa fixed right-4 bottom-4 z-40 sm:right-6 sm:bottom-6"
+          className="pill wa floating-wa fixed z-40"
           style={{ boxShadow: "0 16px 30px -12px rgba(31,168,85,.6)" }}
         >
           <span className="hidden sm:inline">WhatsApp</span>

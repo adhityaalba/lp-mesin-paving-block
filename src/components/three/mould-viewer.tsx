@@ -127,7 +127,7 @@ export default function MouldViewer({ mould, finish }: { mould: MouldKey; finish
   }, []);
 
   return (
-    <div ref={wrap} className="absolute inset-0" aria-hidden>
+    <div ref={wrap} className="mould-viewer absolute inset-0" aria-hidden>
       <Canvas
         shadows
         dpr={[1, 1.8]}

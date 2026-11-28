@@ -13,16 +13,21 @@ export const getLenis = () => lenisInstance;
 
 /**
  * Lenis smooth scrolling, driven by GSAP's ticker so ScrollTrigger stays in sync.
- * Disabled entirely for users who prefer reduced motion.
+ * Touch keeps native inertia; Lenis respects reduced motion, including live changes.
  */
 export function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
-
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true, anchors: { offset: -80 } });
+    const lenis = new Lenis({
+      duration: 1,
+      smoothWheel: true,
+      syncTouch: false,
+      respectReducedMotion: true,
+      stopInertiaOnNavigate: true,
+      // Lenis reads html scroll-padding-top, also used by native hash navigation.
+      anchors: true,
+    });
     lenisInstance = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -36,10 +41,12 @@ export function SmoothScroll() {
     };
   }, []);
 
-  // New route: jump to top and let ScrollTrigger re-measure.
+  // Next owns route, hash and Back/Forward scroll restoration. Only re-measure here.
   useEffect(() => {
-    lenisInstance?.scrollTo(0, { immediate: true });
-    const id = window.setTimeout(() => ScrollTrigger.refresh(), 120);
+    const id = window.setTimeout(() => {
+      lenisInstance?.resize();
+      ScrollTrigger.refresh();
+    }, 120);
     return () => window.clearTimeout(id);
   }, [pathname]);
 

@@ -19,6 +19,7 @@ export async function sourceContent() {
     ...storedMachineSchema.parse({
       ...machine, image: fileName(machine.image), studio: fileName(machine.studio),
       gallery: machine.gallery.map((image) => ({ ...image, src: fileName(image.src) })),
+      video: machine.video ? fileName(machine.video) : undefined,
     }), position,
   }));
   for (const rows of [articles, products]) {
@@ -30,7 +31,8 @@ export async function sourceContent() {
     ...articles.flatMap((article) => [article.cover, ...Array.from(article.html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g), (match) => match[1])]),
     ...products.flatMap((product) => [product.image, product.studio, ...product.gallery.map((image) => image.src)]),
   ].filter(Boolean);
-  for (const file of new Set(images)) {
+  const videos = products.flatMap((product) => product.video ? [product.video] : []);
+  for (const file of new Set([...images, ...videos])) {
     await access(fileURLToPath(new URL(`public/${publicFileSchema.parse(file)}`, root)));
   }
   return { articles, products, imageCount: new Set(images).size };

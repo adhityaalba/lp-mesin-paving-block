@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/mesin/[slug]">): 
   if (!m) return {};
   return {
     title: `Mesin Paving Block ${m.code} — ${m.nickname}`,
-    description: `${m.summary} Spesifikasi lengkap, produktivitas, dan promo free 1 set cetakan.`,
+    description: `${m.summary} Spesifikasi lengkap, produktivitas, dan promo gratis setting dan training di lokasi.`,
     alternates: { canonical: `/mesin/${m.slug}/` },
     openGraph: { images: [{ url: m.gallery[0]?.src ?? m.image }] },
   };
@@ -79,7 +79,7 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
         title={`${m.code}, ${m.nickname}`}
         lead={m.summary}
         img={m.studio}
-        alt={`Foto studio mesin paving block ${m.code} ${m.nickname}`}
+        alt={`Mesin paving block ${m.code} ${m.nickname}`}
         product={{ bg: m.studioBg }}
         crumbs={[{ href: "/mesin/", label: "Mesin" }, { label: m.code }]}
         actions={
@@ -114,7 +114,7 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
               <Pill href={waLink(msg)}>Pesan {m.code}</Pill>
             </Reveal>
             <Reveal className="chips" style={{ marginTop: 18 }}>
-              <span className="gold">Free 1 set cetakan</span>
+              <span className="gold">Gratis setting dan training di lokasi</span>
               <span>DP 30%</span>
               <span>Garansi 1 tahun</span>
             </Reveal>
@@ -134,12 +134,31 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
             {m.gallery.slice(0, 3).map((g) => (
               <Item key={g.src} className="card lift" style={{ padding: 8 }}>
                 <div className="relative aspect-[4/5] overflow-hidden" style={{ borderRadius: 14 }}>
-                  <Image src={g.src} alt={g.alt} fill sizes="(min-width:768px) 31vw, 92vw" className="object-cover" />
+                  <Image src={g.src} alt={g.alt} fill sizes="(min-width:768px) 31vw, 92vw" className="object-contain" />
                 </div>
                 <p className="dim" style={{ fontSize: 13, padding: "10px 8px 6px" }}>{g.alt}</p>
               </Item>
             ))}
           </Stagger>
+        </section>
+      )}
+
+      {m.video && (
+        <section className="shell sec" aria-labelledby="machine-video-title">
+          <div className="inner two">
+            <div className="l">
+              <p className="label">Dokumentasi workshop</p>
+              <h2 id="machine-video-title" className="h-sec" style={{ marginTop: 10 }}>Lihat {m.code} dari dekat</h2>
+              <p className="muted" style={{ marginTop: 16 }}>Video mesin {m.code} di workshop Multi Baja Technic.</p>
+              <p style={{ marginTop: 24 }}><a href={m.video} className="underline">Buka video {m.code}</a></p>
+            </div>
+            <div className="r">
+              <video controls playsInline preload="none" poster={m.image} aria-label={`Video mesin ${m.code} di workshop`} style={{ width: "100%", maxWidth: 420, aspectRatio: "9 / 16", background: "#171717", borderRadius: 20, objectFit: "contain", marginInline: "auto" }}>
+                <source src={m.video} type="video/mp4" />
+                Browser Anda tidak mendukung pemutaran video. Gunakan tautan buka video.
+              </video>
+            </div>
+          </div>
         </section>
       )}
 

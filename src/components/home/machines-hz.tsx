@@ -13,7 +13,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const TAG: Record<string, string> = { rh1e15: "Unggulan", rh1s12: "Paket lengkap", hr6e12: "Favorit pemula" };
 
-/** The section pins and the machine cards travel sideways (desktop). Mobile gets a native swipe row. */
+/** Large screens get a pinned catalogue; other layouts read vertically. */
 export function MachinesHz({ machines }: { machines: Machine[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ export function MachinesHz({ machines }: { machines: Machine[] }) {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add("(min-width: 1081px) and (prefers-reduced-motion: no-preference)", () => {
+      mm.add("(min-width: 1081px) and (min-height: 760px) and (prefers-reduced-motion: no-preference)", () => {
         const el = track.current!;
         const dist = () => el.scrollWidth - window.innerWidth;
         const tween = gsap.to(el, {
@@ -43,23 +43,14 @@ export function MachinesHz({ machines }: { machines: Machine[] }) {
           });
         });
       });
-      mm.add("(max-width: 1080px)", () => {
-        track.current!.style.overflowX = "auto";
-        track.current!.style.width = "100%";
-        track.current!.style.scrollSnapType = "x mandatory";
-        return () => {
-          track.current!.style.overflowX = "";
-          track.current!.style.width = "";
-          track.current!.style.scrollSnapType = "";
-        };
-      });
+      return () => mm.revert();
     },
     { scope: root },
   );
 
   return (
-    <section ref={root} id="mesin" className="hz" style={{ paddingBlock: "clamp(56px, 8vh, 96px)", scrollMarginTop: 0 }} aria-labelledby="hz-h">
-      <div style={{ minHeight: "min(100svh, 900px)", display: "flex", alignItems: "center" }}>
+    <section ref={root} id="mesin" className="hz" style={{ paddingBlock: "clamp(56px, 8vh, 96px)" }} aria-labelledby="hz-h">
+      <div className="hz-viewport">
         <div ref={track} className="hz-track" style={{ paddingBottom: 12 }}>
           <div className="hz-intro">
             <span className="label">Katalog mesin</span>
@@ -79,8 +70,8 @@ export function MachinesHz({ machines }: { machines: Machine[] }) {
               <article key={m.slug} className="mcard" style={{ scrollSnapAlign: "center" }}>
                 <div className="mcard-vis" style={{ background: m.studioBg }}>
                   <div className="m-photo">
-                    <div className="absolute inset-[2%_-4%_0] m-move">
-                      <Image src={m.studio} alt={`Foto studio mesin ${m.code} ${m.nickname}`} fill sizes="(min-width:1080px) 46vw, 88vw" style={{ objectFit: "contain", objectPosition: "50% 100%" }} />
+                    <div className="m-move">
+                      <Image src={m.studio} alt={`Mesin paving block ${m.code} ${m.nickname}`} fill sizes="(min-width:1080px) 46vw, 88vw" style={{ objectFit: "contain", objectPosition: "50% 100%" }} />
                     </div>
                   </div>
                   <span className="badge" style={{ position: "absolute", left: 18, bottom: 18 }}>
@@ -118,7 +109,7 @@ export function MachinesHz({ machines }: { machines: Machine[] }) {
               </article>
             );
           })}
-          <div style={{ width: "clamp(12px, 4vw, 60px)", flex: "none" }} aria-hidden />
+          <div className="hz-spacer" aria-hidden />
         </div>
       </div>
       <div className="hz-bar" aria-hidden><i /></div>

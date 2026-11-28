@@ -57,7 +57,7 @@ export function Calculator({ machines }: { machines: Machine[] }) {
           </div>
           <div className="card red" style={{ borderRadius: 18, padding: "22px 24px", boxShadow: "none" }}>
             <span className="label">Perkiraan paving per hari</span>
-            <div style={{ fontSize: "clamp(52px, 6vw, 88px)", fontWeight: 500, letterSpacing: "-0.05em", lineHeight: 1, marginTop: 8 }} className="tnum" aria-live="polite">
+            <div style={{ fontWeight: 500, letterSpacing: "-0.05em", lineHeight: 1, marginTop: 8 }} className="calc-value tnum" aria-live="polite">
               <Num value={perDay} />
             </div>
             <div style={{ display: "flex", gap: 24, marginTop: 14, flexWrap: "wrap", fontSize: 15 }}>

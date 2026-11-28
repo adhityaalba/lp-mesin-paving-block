@@ -67,3 +67,19 @@ Sebelum commit/push/deploy, ikuti `GIT_WORKFLOW.md`:
 6. Verifikasi home, indeks/detail artikel, katalog/detail produk, sitemap, kalkulator, dan gambar setelah deploy.
 
 Jika rilis aplikasi perlu dibatalkan, versi kode sebelumnya masih dapat menggunakan snapshot file lamanya. Jangan otomatis menghapus tabel atau me-reset branch database sebagai langkah rollback.
+
+## Revisi klien 28 November 2026: foto asli dan layanan
+
+Enam foto asli RH1E15/RH1S12 dan satu video RH1S12 disimpan di `public/media/mesin/`, tanpa mengubah gambar sumber. `next/image` mengoptimalkan foto saat ditampilkan; video memakai controls, poster, `preload="none"`, dan tanpa autoplay. Field `video`, seperti field gambar, menyimpan path relatif terhadap `public/`. Snapshot produk diperbarui untuk instalasi baru.
+
+Untuk database yang sudah berisi data, migrasi awal tidak menimpa record. Gunakan pembaruan terarah berikut setelah aset baru sudah tersedia di deployment target dan tindakan pada database itu diizinkan:
+
+```sh
+node scripts/apply-client-feedback.mjs
+node scripts/apply-client-feedback.mjs --apply --target-host=HOST_DATABASE_YANG_DISETUJUI
+npm run db:verify
+```
+
+Script hanya mengganti field media RH1E15/RH1S12 dan kalimat promo cetakan pada artikel `jenis-cetakan-paving-block` menjadi gratis setting dan training di lokasi. Spesifikasi produk dan bagian artikel lainnya dipertahankan. Pengulangan menghasilkan nilai media yang sama dan tidak mengubah ulang tanggal artikel yang sudah dikoreksi.
+
+Urutan rilis: deploy aset dan kode ke Preview dahulu, terapkan data pada Neon development, lalu periksa tampilannya. Untuk Production, ulangi urutan yang sama dengan persetujuan rilis. Jangan mengubah referensi media database yang digunakan deployment aktif sebelum file tersedia; itu akan menyebabkan gambar 404.

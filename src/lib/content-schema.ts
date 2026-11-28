@@ -21,7 +21,7 @@ export const storedMachineSchema = z.object({
   description: z.array(text), image: publicFileSchema, imageAlt: text,
   studio: publicFileSchema, studioBg: z.string().regex(/^#[\da-fA-F]{6}$/),
   gallery: z.array(z.object({ src: publicFileSchema, alt: text })),
-  video: text.optional(),
+  video: publicFileSchema.optional(),
   highlight: z.object({ strength: text, output: text, cycle: text, power: text }),
   calc: z.object({ pcsPerCycle: z.number().positive(), cycleSeconds: z.number().positive() }),
   general: z.array(spec).min(1), main: z.array(spec).min(3), support: z.array(spec).min(3),
@@ -42,5 +42,6 @@ export function machineForDisplay(input: unknown): Machine {
   return {
     ...machine, image: publicFileUrl(machine.image), studio: publicFileUrl(machine.studio),
     gallery: machine.gallery.map((image) => ({ ...image, src: publicFileUrl(image.src) })),
+    video: machine.video ? publicFileUrl(machine.video) : undefined,
   };
 }
