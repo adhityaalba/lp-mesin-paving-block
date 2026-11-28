@@ -8,16 +8,17 @@ import { CompareTable } from "@/components/machines/compare-table";
 import { CtaBanner } from "@/components/cta-banner";
 import { Counter, Item, Reveal, Stagger } from "@/components/motion/reveal";
 import { Pill } from "@/components/ui/pill";
-import { getMachine, machines, type Spec } from "@/lib/machines";
+import { getMachine, getMachines, type Spec } from "@/lib/machines";
 import { site, waLink } from "@/lib/site";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const machines = await getMachines();
   return machines.map((m) => ({ slug: m.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/mesin/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const m = getMachine(slug);
+  const m = await getMachine(slug);
   if (!m) return {};
   return {
     title: `Mesin Paving Block ${m.code} — ${m.nickname}`,
@@ -54,8 +55,9 @@ export default function MachinePage({ params }: PageProps<"/mesin/[slug]">) {
 
 async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["params"] }) {
   const { slug } = await params;
-  const m = getMachine(slug);
+  const m = await getMachine(slug);
   if (!m) notFound();
+  const machines = await getMachines();
   const others = machines.filter((x) => x.slug !== m.slug);
   const msg = `Halo CV Multi Baja Technic, saya tertarik mesin ${m.code} (${m.nickname}). Boleh minta info harga & ketersediaan?`;
   const strength = parseInt(m.highlight.strength.replace("K", ""), 10);
@@ -162,7 +164,7 @@ async function MachineContent({ params }: { params: PageProps<"/mesin/[slug]">["
       </section>
 
       <CtaBanner title={`Pesan ${m.code} sekarang`} message={msg} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd).replace(/</g, "\\u003c") }} />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { getMachines } from "@/lib/machines";
 import { Hero } from "@/components/home/hero";
 import { Stats } from "@/components/home/stats";
 import { Bento } from "@/components/home/bento";
@@ -10,7 +11,7 @@ import { PostCard } from "@/components/post-card";
 import { Item, Reveal, Stagger } from "@/components/motion/reveal";
 import { Pill } from "@/components/ui/pill";
 import { faqs } from "@/lib/site";
-import { posts } from "@/lib/posts";
+import { getPosts } from "@/lib/posts";
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -18,15 +19,16 @@ const faqJsonLd = {
   mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 };
 
-export default function Home() {
+export default async function Home() {
+  const [machines, posts] = await Promise.all([getMachines(), getPosts()]);
   return (
     <>
       <Hero />
       <Stats />
       <Bento />
-      <MachinesHz />
+      <MachinesHz machines={machines} />
       <ProcessStack />
-      <Calculator />
+      <Calculator machines={machines} />
 
       <section className="shell sec" style={{ paddingTop: 0 }} aria-labelledby="faq-h">
         <div className="two inner">

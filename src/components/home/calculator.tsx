@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
 import { Reveal } from "@/components/motion/reveal";
 import { Pill } from "@/components/ui/pill";
-import { machines } from "@/lib/machines";
+import type { Machine } from "@/lib/content-schema";
 import { waLink } from "@/lib/site";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -21,11 +21,12 @@ function Num({ value }: { value: number }) {
   return <motion.span>{text}</motion.span>;
 }
 
-export function Calculator() {
+export function Calculator({ machines }: { machines: Machine[] }) {
   const [mi, setMi] = useState(0);
   const [hours, setHours] = useState(8);
   const [eff, setEff] = useState(70);
-  const m = machines[mi];
+  const m = machines[mi] ?? machines[0];
+  if (!m) return null;
   const perDay = (3600 / m.calc.cycleSeconds) * m.calc.pcsPerCycle * hours * (eff / 100);
   const m2 = perDay / PCS_PER_M2;
   const msg = `Halo, saya menghitung di website: mesin ${m.code}, ${hours} jam/hari, efisiensi ${eff}% ≈ ${Math.round(perDay).toLocaleString("id-ID")} paving/hari (${Math.round(m2)} m²). Mohon info harga & detailnya.`;

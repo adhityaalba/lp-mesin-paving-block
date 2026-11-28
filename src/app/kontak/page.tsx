@@ -1,3 +1,4 @@
+import { getMachines } from "@/lib/machines";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { PageHero } from "@/components/page-hero";
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/kontak/" },
 };
 
-export default function KontakPage() {
+export default async function KontakPage() {
+  const machines = await getMachines();
   const rows: [string, ReactNode][] = [
     ["WhatsApp", <a key="wa" className="link-u" href={waLink()} target="_blank" rel="noopener noreferrer">{site.phone}</a>],
     ["Telepon", <a key="tel" className="link-u" href={`tel:+${site.phoneRaw}`}>{site.phone}</a>],
@@ -47,7 +49,7 @@ export default function KontakPage() {
           <Reveal className="r card pad" delay={0.1}>
             <span className="label">Kirim pertanyaan</span>
             <h2 className="h-card" style={{ marginTop: 8 }}>Pesan Anda langsung terbuka di WhatsApp kami</h2>
-            <ContactForm />
+            <ContactForm machines={machines.map(({ slug, code, nickname }) => ({ slug, code, nickname }))} />
           </Reveal>
         </div>
         <Reveal className="card" style={{ marginTop: 16, padding: 8 }}>

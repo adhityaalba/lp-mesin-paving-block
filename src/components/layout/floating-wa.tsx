@@ -4,10 +4,10 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { WhatsAppIcon } from "@/components/ui/icons";
-import { machines } from "@/lib/machines";
+import type { MachineLink } from "@/lib/content-schema";
 import { waLink } from "@/lib/site";
 
-export function FloatingWA() {
+export function FloatingWA({ machines }: { machines: MachineLink[] }) {
   const pathname = usePathname();
   const [show, setShow] = useState(false);
   useEffect(() => {

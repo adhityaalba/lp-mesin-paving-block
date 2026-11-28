@@ -1,7 +1,8 @@
-import { compareRows, machines } from "@/lib/machines";
+import { compareRows, getMachines } from "@/lib/machines";
 
 /** Plain comparison table; the highlighted column is the machine in focus (if any). */
-export function CompareTable({ focus }: { focus?: string }) {
+export async function CompareTable({ focus }: { focus?: string }) {
+  const machines = await getMachines();
   return (
     <div className="table-wrap">
       <table className="compare">

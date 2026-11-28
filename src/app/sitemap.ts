@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { machines } from "@/lib/machines";
-import { posts } from "@/lib/posts";
+import { getMachines } from "@/lib/machines";
+import { getPosts } from "@/lib/posts";
 import { site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [machines, posts] = await Promise.all([getMachines(), getPosts()]);
   const pages = ["", "mesin/", "tentang/", "promo/", "artikel/", "kontak/"].map((p) => ({
     url: `${site.domain}/${p}`,
     changeFrequency: "monthly" as const,

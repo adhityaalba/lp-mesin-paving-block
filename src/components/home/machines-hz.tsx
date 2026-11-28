@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Pill } from "@/components/ui/pill";
-import { machines } from "@/lib/machines";
+import type { Machine } from "@/lib/content-schema";
 import { waLink } from "@/lib/site";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -14,7 +14,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 const TAG: Record<string, string> = { rh1e15: "Unggulan", rh1s12: "Paket lengkap", hr6e12: "Favorit pemula" };
 
 /** The section pins and the machine cards travel sideways (desktop). Mobile gets a native swipe row. */
-export function MachinesHz() {
+export function MachinesHz({ machines }: { machines: Machine[] }) {
   const root = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
 

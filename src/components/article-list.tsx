@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { PostCard } from "@/components/post-card";
-import type { Post } from "@/lib/posts";
+import type { Post } from "@/lib/content-schema";
 
 const PAGE = 12;
 

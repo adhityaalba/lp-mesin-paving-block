@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { machines } from "@/lib/machines";
+import type { MachineLink } from "@/lib/content-schema";
 import { site, waLink } from "@/lib/site";
 
-export function Footer() {
+export function Footer({ machines }: { machines: MachineLink[] }) {
   return (
     <footer className="foot shell">
       <div className="inner">

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Post } from "@/lib/posts";
-import { formatDate } from "@/lib/posts";
+import type { Post } from "@/lib/content-schema";
+import { formatDate } from "@/lib/post-format";
 
 export function PostCard({ post, priority = false }: { post: Post; priority?: boolean }) {
   return (

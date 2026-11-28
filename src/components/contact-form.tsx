@@ -2,11 +2,11 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { ArrowUR } from "@/components/ui/icons";
-import { machines } from "@/lib/machines";
+import type { MachineLink } from "@/lib/content-schema";
 import { waLink } from "@/lib/site";
 
 /** No backend: composes a WhatsApp message from the form. */
-export function ContactForm({ defaultMachine = "" }: { defaultMachine?: string }) {
+export function ContactForm({ machines, defaultMachine = "" }: { machines: MachineLink[]; defaultMachine?: string }) {
   const id = useId();
   const [error, setError] = useState<string | null>(null);
 

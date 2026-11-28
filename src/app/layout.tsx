@@ -1,3 +1,4 @@
+import { getMachines } from "@/lib/machines";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Header } from "@/components/layout/header";
@@ -66,7 +67,8 @@ const orgJsonLd = {
   areaServed: "ID",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const machines = (await getMachines()).map(({ slug, code, nickname }) => ({ slug, code, nickname }));
   return (
     <html lang="id" className={general.variable}>
       <body>
@@ -79,8 +81,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <Header />
         <main id="konten">{children}</main>
-        <Footer />
-        <FloatingWA />
+        <Footer machines={machines} />
+        <FloatingWA machines={machines} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
       </body>
     </html>

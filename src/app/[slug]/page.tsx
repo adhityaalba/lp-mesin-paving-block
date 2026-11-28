@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/post-format";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
@@ -7,18 +8,19 @@ import { PostCard } from "@/components/post-card";
 import { CtaBanner } from "@/components/cta-banner";
 import { ReadingProgress } from "@/components/reading-progress";
 import { Pill } from "@/components/ui/pill";
-import { formatDate, getPost, posts, relatedPosts } from "@/lib/posts";
-import { machines } from "@/lib/machines";
+import { getPost, getPosts, relatedPosts } from "@/lib/posts";
+import { getMachines } from "@/lib/machines";
 import { site, waLink } from "@/lib/site";
 
 /** Articles keep their original WordPress URL: /{slug}/ */
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const posts = await getPosts();
   return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const p = getPost(slug);
+  const p = await getPost(slug);
   if (!p) return {};
   return {
     title: p.title,
@@ -38,9 +40,9 @@ export default function PostPage({ params }: PageProps<"/[slug]">) {
 
 async function PostContent({ params }: { params: PageProps<"/[slug]">["params"] }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) notFound();
-  const related = relatedPosts(post);
+  const [related, machines] = await Promise.all([relatedPosts(post), getMachines()]);
   const mentioned = machines.filter((m) => post.html.includes(m.code) || post.title.includes(m.code));
 
   const jsonLd = {
@@ -115,7 +117,7 @@ async function PostContent({ params }: { params: PageProps<"/[slug]">["params"] 
         </div>
       </section>
       <CtaBanner />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>
   );
 }

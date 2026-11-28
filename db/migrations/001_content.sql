@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS public.articles (
+  slug text PRIMARY KEY,
+  title text NOT NULL,
+  date text NOT NULL,
+  modified text NOT NULL,
+  excerpt text NOT NULL,
+  cover text,
+  "coverAlt" text NOT NULL,
+  categories jsonb NOT NULL CHECK (jsonb_typeof(categories) = 'array'),
+  tags jsonb NOT NULL CHECK (jsonb_typeof(tags) = 'array'),
+  "readingMinutes" integer NOT NULL CHECK ("readingMinutes" > 0),
+  html text NOT NULL,
+  position integer NOT NULL,
+  CHECK (cover IS NULL OR (cover !~ '^/' AND cover !~ ':' AND cover !~ '\.\.'))
+);
+-- statement
+CREATE TABLE IF NOT EXISTS public.products (
+  slug text PRIMARY KEY,
+  code text NOT NULL UNIQUE,
+  nickname text NOT NULL,
+  tagline text NOT NULL,
+  summary text NOT NULL,
+  description jsonb NOT NULL,
+  image text NOT NULL CHECK (image !~ '^/' AND image !~ ':' AND image !~ '\.\.'),
+  "imageAlt" text NOT NULL,
+  studio text NOT NULL CHECK (studio !~ '^/' AND studio !~ ':' AND studio !~ '\.\.'),
+  "studioBg" text NOT NULL,
+  gallery jsonb NOT NULL CHECK (jsonb_typeof(gallery) = 'array'),
+  video text,
+  highlight jsonb NOT NULL,
+  calc jsonb NOT NULL,
+  general jsonb NOT NULL,
+  main jsonb NOT NULL,
+  support jsonb NOT NULL,
+  productivity jsonb NOT NULL,
+  "idealFor" text NOT NULL,
+  "oldPath" text NOT NULL,
+  position integer NOT NULL,
+  CHECK ((calc->>'pcsPerCycle')::numeric > 0 AND (calc->>'cycleSeconds')::numeric > 0)
+);

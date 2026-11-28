@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { ArticleList } from "@/components/article-list";
-import { posts } from "@/lib/posts";
+import { getPosts } from "@/lib/posts";
 
 export const metadata: Metadata = {
   title: "Artikel & Panduan Usaha Paving Block",
@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/artikel/" },
 };
 
-export default function ArtikelPage() {
+export default async function ArtikelPage() {
+  const posts = await getPosts();
   const tags = Array.from(
     posts.flatMap((p) => p.tags).reduce((m, t) => m.set(t, (m.get(t) ?? 0) + 1), new Map<string, number>()),
   )

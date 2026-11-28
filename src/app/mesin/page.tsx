@@ -1,3 +1,4 @@
+import { getMachines } from "@/lib/machines";
 import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { MachinesHz } from "@/components/home/machines-hz";
@@ -15,7 +16,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/mesin/" },
 };
 
-export default function MesinPage() {
+export default async function MesinPage() {
+  const machines = await getMachines();
   return (
     <>
       <PageHero
@@ -32,7 +34,7 @@ export default function MesinPage() {
           </>
         }
       />
-      <MachinesHz />
+      <MachinesHz machines={machines} />
       <section id="banding" className="shell sec" style={{ scrollMarginTop: 90 }}>
         <div className="inner" style={{ marginBottom: 24 }}>
           <Reveal as="p" className="label">Perbandingan</Reveal>
@@ -42,7 +44,7 @@ export default function MesinPage() {
           <CompareTable />
         </Reveal>
       </section>
-      <Calculator />
+      <Calculator machines={machines} />
       <CtaBanner title="Masih bingung memilih?" body="Ceritakan target produksi Anda. Kami bantu hitung kebutuhan mesin, lahan, dan listrik, gratis." />
     </>
   );
